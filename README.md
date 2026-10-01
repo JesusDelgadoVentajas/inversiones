@@ -2,7 +2,7 @@
 
 Proyecto de aplicación personal para buscar empresas cotizadas por su nombre y consultar precios, cuentas, métricas, noticias, competidores y eventos con fuentes y fechas visibles.
 
-**Estado:** preparación documental del desarrollo. La aplicación, las cuentas de servicios, las pruebas de proveedores y el despliegue siguen pendientes. El presupuesto acordado de servicios es 0 €; la cobertura gratuita se debe demostrar antes de construir la ficha completa.
+**Estado:** armazón local React + Worker terminado, sin datos financieros reales. Las cuentas de Cloudflare y proveedores, la protección de acceso, la cobertura gratuita y el despliegue siguen pendientes. El presupuesto objetivo de servicios es 0 € y aún no se ha demostrado para el producto completo.
 
 ## Dónde empezar
 
@@ -13,6 +13,7 @@ Proyecto de aplicación personal para buscar empresas cotizadas por su nombre y 
 | Retomar el trabajo con una IA | [Instrucciones del proyecto](AGENTS.md) y [tarea actual](docs/tareas/tarea-actual.md). |
 | Conocer los criterios de código y pruebas | [Calidad](docs/ia/CALIDAD.md). |
 | Saber por qué se tomó una decisión | [Registro de decisiones](docs/DECISIONES.md). |
+| Revisar fuentes y huecos de datos | [Cobertura](docs/COBERTURA.md) y [proveedores](docs/PROVEEDORES.md). |
 | Preparar una tarea nueva | [Plantilla de tarea](docs/tareas/PLANTILLA.md). |
 
 ## Trabajar con Codex
@@ -50,14 +51,22 @@ Codex puede seleccionarlas cuando encajen con la tarea. También puedes pedir ex
 
 ## Ejecutar la aplicación
 
-Todavía no existe `app/` ni `package.json`. No hay comandos de instalación o arranque operativos. La generación del proyecto y las comprobaciones automáticas se prepararán en [F03](PLAN_CONSTRUCCION.md#f03), después de las dependencias indicadas en el plan. En esa fase se documentarán aquí los comandos comprobados.
+Con Node 24.21.0 (ver `app/.node-version`):
 
-La arquitectura de referencia es React y TypeScript con web y API en un Cloudflare Worker, D1 y acceso personal. Su funcionamiento y coste en la cuenta real permanecen pendientes de validación.
+```sh
+cd app
+npm ci
+npm run dev
+```
+
+Abrir la URL local que imprima Vite, también desde un móvil en la misma red si se configura el servidor para escuchar en esa red. Para ejecutar todas las verificaciones locales: `npm run check`. Los comandos y su alcance están en [app/README.md](app/README.md). La página muestra solo el estado del armazón; `GET /api/health` y `GET /api/example` no entregan precios reales.
+
+El repositorio [GitHub público](https://github.com/JesusDelgadoVentajas/inversiones) está creado, pero aún vacío por falta de push. D1, Cloudflare Access y Workers remotos no están configurados ni probados. Consultar [estado](docs/ESTADO.md) antes de proseguir.
 
 ## Mantenimiento de la documentación
 
 El plan define requisitos y aceptación; `ESTADO.md` registra el avance actual; `DECISIONES.md` conserva decisiones y motivos; la tarea actual concreta el trabajo siguiente. Cada dato tiene una ubicación principal: enlaza su origen en vez de copiarlo y crear versiones contradictorias.
 
-Las [comprobaciones de esta preparación](docs/evidencias/PREPARACION_IA.md) documentan el alcance de la revisión inicial.
+Las [comprobaciones de la preparación](docs/evidencias/PREPARACION_IA.md) y [las de F01–F03](docs/evidencias/F01_F03.md) documentan el alcance de las revisiones.
 
 Referencias de la configuración del agente: [AGENTS.md en Codex](https://learn.chatgpt.com/docs/agent-configuration/agents-md) y [skills del repositorio](https://learn.chatgpt.com/docs/build-skills). Los nombres de comandos y rutas de descubrimiento deben contrastarse con el cliente instalado si cambia su comportamiento.

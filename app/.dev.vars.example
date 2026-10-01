@@ -1,0 +1,2 @@
+# Ejemplo sin valores privados. APP_READY y ALLOW_LIVE_PROVIDERS ya son false en wrangler.jsonc.
+# Las futuras claves solo se incorporarán tras validar derechos, cuota y acceso personal.

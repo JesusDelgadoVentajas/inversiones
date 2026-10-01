@@ -1,0 +1,37 @@
+{
+  "name": "app",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "typecheck": "tsc -b",
+    "lint": "oxlint",
+    "test:unit": "node --test ../experiments/provider-spike/runner.test.mjs",
+    "test:integration": "vitest run --config vitest.config.ts",
+    "check:config": "node scripts/check-config.mjs",
+    "check:secrets": "node scripts/check-secrets.mjs",
+    "build:staging": "node scripts/build.mjs staging",
+    "build:production": "node scripts/build.mjs production",
+    "check": "npm run typecheck && npm run lint && npm run test:unit && npm run test:integration && npm run check:config && npm run build:staging && npm run build:production && npm run check:secrets",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@cloudflare/vite-plugin": "^1.62.3",
+    "@cloudflare/vitest-plugin": "1.3.5",
+    "@cloudflare/workers-types": "5.20261001.1",
+    "@types/node": "^24.19.0",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "@vitejs/plugin-react": "^6.1.1",
+    "oxlint": "^1.81.0",
+    "typescript": "~6.0.2",
+    "vite": "^8.3.0",
+    "vitest": "4.1.11",
+    "wrangler": "^4.145.0"
+  }
+}

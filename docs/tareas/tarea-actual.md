@@ -1,37 +1,21 @@
-# F01.01 — Comprobar el entorno de desarrollo
+# F01.04 — Verificar Cloudflare Free y preparar acceso personal
 
-- **Estado:** PENDIENTE.
-- **Responsable:** próxima persona o IA que continúe la construcción.
-- **Requisito relacionado:** R15, mantenimiento reproducible.
-- **Dependencia:** F00, preparación inicial documentada en [ESTADO.md](../ESTADO.md).
+- **Estado:** PENDIENTE por acceso a la cuenta de Cloudflare.
+- **Dependencias:** F01.01–F01.03 completadas; armazón F03 disponible.
+- **Objetivo:** verificar que la cuenta del propietario admite Workers Free y registrar límites reales sin activar servicios facturables.
 
-## Objetivo
+## Pasos
 
-Comprobar las herramientas instaladas y elegir una versión de Node LTS compatible con la generación prevista, antes de crear `app/`. Registrar evidencia suficiente para que otra sesión sepa qué está disponible.
+1. El propietario inicia sesión en su cuenta de Cloudflare por un mecanismo seguro local. No compartir contraseñas, tokens ni códigos de recuperación por chat o Git.
+2. Verificar cuenta, plan Workers Free, facturación y cuotas vigentes; registrar fecha y evidencia saneada en [costes](../COSTES.md).
+3. Configurar Access gratuito y un método personal de ingreso (F01.05). Comprobar que la protección cubra el hostname de ensayo **antes** de consultar proveedores o publicar datos. Revisar el caso de rutas `*.workers.dev` y previews.
+4. Ya con protección demostrada, desplegar una sonda Worker sin claves/datos y verificar acceso autorizado y denegado (F02.02). El despliegue requerirá autorización según el alcance de la sesión vigente; nunca asumirla de un simple commit.
+5. Revisar las cuentas gratuitas de datos y claves que falten (F01.06–F01.07); ejecutar la [sonda local](../../experiments/provider-spike/README.md) con presupuesto explícito, sin subir resultados privados.
 
-## Contexto mínimo
+## Cierre
 
-- [AGENTS.md](../../AGENTS.md) y [estado actual](../ESTADO.md).
-- [Plan, sección 13](../../PLAN_CONSTRUCCION.md#s13) para entorno y comandos previstos.
-- [F01](../../PLAN_CONSTRUCCION.md#f01) para dependencias y tareas de cuentas que siguen pendientes.
+- [ ] Cuenta y plan Free reales comprobados; ninguna facturación no deseada.
+- [ ] Límites y responsable registrados en `docs/COSTES.md`.
+- [ ] F01.04 marcada en el plan; continuar F01.05 y F02 según dependencias.
 
-## Trabajo
-
-1. Inspeccionar Git y conservar el historial, remotos y cambios existentes. No repetir `git init` si el repositorio ya existe.
-2. Ejecutar `git --version`, `node --version` y `npm --version`; registrar versiones y disponibilidad.
-3. Comprobar en documentación oficial vigente qué Node LTS es compatible con las herramientas que se utilizarán. La mención de Node 24 en el plan tiene fecha de referencia; no sustituye esta comprobación.
-4. Si falta una herramienta o hay incompatibilidad, documentar exactamente cuál y el paso necesario. Respetar el gestor de versiones existente; no alterar globalmente el equipo por conveniencia.
-5. Registrar resultados saneados en el estado o una evidencia breve. Mantener separadas las tareas de cuentas, visibilidad y remoto.
-
-## Criterios de aceptación
-
-- [ ] Git, Node y npm comprobados, con sus versiones reales.
-- [ ] Versión de Node elegida con compatibilidad documentada, o bloqueo explícito que mantenga abierta la tarea.
-- [ ] Estado del repositorio y siguiente paso registrados sin perder cambios existentes.
-- [ ] F01.01 marcada en el plan solo si cumple todos sus criterios.
-
-## Resultado actual
-
-Pendiente de ejecución. Crear los documentos de trabajo y hacer su commit no verifica Node, npm, cuentas de Cloudflare, proveedores ni capacidad de despliegue.
-
-**Siguiente paso al cerrar:** continuar F01.02, comprobando si falta remoto, y F01.03, visibilidad. No repetir trabajo Git ya realizado. Actualizar esta ficha con la siguiente tarea cuando se retome el proyecto, conservando evidencia del trabajo cerrado.
+El estado integral está en [ESTADO.md](../ESTADO.md). No marcar esta tarea con base exclusiva en páginas de precios públicas.

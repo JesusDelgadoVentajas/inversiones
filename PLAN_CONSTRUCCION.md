@@ -1022,9 +1022,9 @@ Cada fase tiene un resultado concreto. El orden siguiente es el recomendado para
 | Fase | Entrega | Depende de | Estado de seguimiento |
 |---|---|---|---|
 | [F00](#f00) | Alcance y seguimiento inicial. | Este plan. | COMPLETA; [evidencia](docs/evidencias/PREPARACION_IA.md). |
-| [F01](#f01) | Herramientas, cuentas gratuitas y repositorio. | F00. | PENDIENTE |
-| [F02](#f02) | Prueba de datos, licencias y coste. | F01. | PENDIENTE |
-| [F03](#f03) | Proyecto reproducible y armazón. | F01; integrar decisiones de F02. | PENDIENTE |
+| [F01](#f01) | Herramientas, cuentas gratuitas y repositorio. | F00. | EN CURSO; faltan cuentas, Access y seguridad. |
+| [F02](#f02) | Prueba de datos, licencias y coste. | F01. | EN CURSO; G-DATOS pendiente. |
+| [F03](#f03) | Proyecto reproducible y armazón. | F01; integrar decisiones de F02. | COMPLETA localmente; sin datos reales ni despliegue. |
 | [F04](#f04) | Contratos y modelo de datos. | F02, F03. | PENDIENTE |
 | [F05](#f05) | Infraestructura y acceso protegido. | F03, F04. | PENDIENTE |
 | [F06](#f06) | Adaptadores, caché y presupuesto. | F02, F04, F05. | PENDIENTE |
@@ -1066,23 +1066,25 @@ F03 puede preparar estructura mientras F02 espera acceso externo. No se cierra l
 
 ### F01. Preparar herramientas, cuentas y repositorio
 
-- [ ] F01.01 — Comprobar Git, Node LTS y npm; registrar versiones.
-- [ ] F01.02 — Inicializar Git únicamente si falta; configurar remoto en la cuenta correcta.
-- [ ] F01.03 — Elegir visibilidad del código. Para uso personal se puede mantener privado si las cuotas gratuitas de CI resultan suficientes; los datos serán privados en ambos casos.
+- [x] F01.01 — Comprobar Git, Node LTS y npm; registrar versiones.
+- [x] F01.02 — Inicializar Git únicamente si falta; configurar remoto en la cuenta correcta.
+- [x] F01.03 — Elegir visibilidad del código. El propietario eligió un repositorio público; los datos personales seguirán privados.
 - [ ] F01.04 — Crear o usar cuenta Cloudflare y verificar Workers Free.
 - [ ] F01.05 — Activar modalidad gratuita de Access y un método de acceso del propietario.
 - [ ] F01.06 — Crear solo las cuentas gratuitas de datos necesarias para F02; revisar condiciones y posibles renovaciones.
 - [ ] F01.07 — Guardar claves mediante un mecanismo local privado y añadir exclusiones Git antes de manipularlas.
-- [ ] F01.08 — Crear `docs/COSTES.md`, `docs/PROVEEDORES.md` y registro de licencias.
+- [x] F01.08 — Crear `docs/COSTES.md`, `docs/PROVEEDORES.md` y registro de licencias.
 - [ ] F01.09 — Establecer autenticación fuerte en cuentas y un método de recuperación controlado por el propietario.
 
 **Cierre:** herramientas listas; titular identificado; ningún servicio facturable necesario; claves fuera de Git. Si falta una cuenta, indicar exactamente cuál y continuar solo trabajo que no la requiera.
+
+**Estado 2026-10-01:** entorno, remoto, visibilidad y registros completos; Cloudflare, Access, cuentas y claves pendientes. [Evidencia](docs/evidencias/F01_F03.md).
 
 <a id="f02"></a>
 
 ### F02. Demostrar datos y viabilidad gratuita
 
-- [ ] F02.01 — Crear un script mínimo de prueba con límites de llamadas, tiempos y registros saneados.
+- [x] F02.01 — Crear un script mínimo de prueba con límites de llamadas, tiempos y registros saneados.
 - [ ] F02.02 — Crear un Worker de prueba sin datos ni claves; obtener su hostname y protegerlo con Access antes de habilitar las consultas.
 - [ ] F02.03 — Probar búsqueda por nombre y selección de bolsa/clase.
 - [ ] F02.04 — Probar precios con fecha, moneda, feed y sesión; no aceptar un cero vacío como cotización.
@@ -1097,20 +1099,24 @@ F03 puede preparar estructura mientras F02 espera acceso externo. No se cierra l
 
 **Cierre:** existe una ruta de datos gratuita demostrada para el alcance aceptado. F02 es la principal puerta de viabilidad. Si falla, el informe debe evitar que se inviertan semanas en una interfaz basada en servicios inaccesibles.
 
+**Estado 2026-10-01:** sonda y pruebas sintéticas listas; solo acceso HTML local a páginas de calendario Fed/BCE demostrado. G-DATOS permanece pendiente; ver [cobertura](docs/COBERTURA.md).
+
 <a id="f03"></a>
 
 ### F03. Generar un proyecto reproducible
 
-- [ ] F03.01 — Generar `app/` con la plantilla oficial y TypeScript, conservando este documento.
-- [ ] F03.02 — Fijar Node, dependencias y archivo de bloqueo; revisar licencias de las bibliotecas.
-- [ ] F03.03 — Crear estructura propuesta y los scripts iniciales de desarrollo, tipos, lint y pruebas.
-- [ ] F03.04 — Configurar frontend y Worker locales en el mismo origen.
-- [ ] F03.05 — Preparar una pantalla vacía, ruta de salud y respuesta JSON de ejemplo claramente simulada.
-- [ ] F03.06 — Añadir configuración de staging/production y verificar artefactos por entorno.
-- [ ] F03.07 — Añadir CI determinista mínima sin claves de proveedores.
-- [ ] F03.08 — Probar instalación desde una copia limpia mediante `npm ci`.
+- [x] F03.01 — Generar `app/` con la plantilla oficial y TypeScript, conservando este documento.
+- [x] F03.02 — Fijar Node, dependencias y archivo de bloqueo; revisar licencias de las bibliotecas.
+- [x] F03.03 — Crear estructura inicial y scripts de desarrollo, tipos, lint y pruebas; ampliar módulos solo cuando se implementen.
+- [x] F03.04 — Configurar frontend y Worker locales en el mismo origen.
+- [x] F03.05 — Preparar una pantalla vacía, ruta de salud y respuesta JSON de ejemplo claramente simulada.
+- [x] F03.06 — Añadir configuración de staging/production y verificar artefactos por entorno.
+- [x] F03.07 — Añadir CI determinista mínima sin claves de proveedores.
+- [x] F03.08 — Probar instalación desde una copia limpia mediante `npm ci`.
 
 **Cierre:** otra persona puede clonar, instalar y abrir el armazón local; no hay datos reales expuestos ni dependencia del estado de un ordenador.
+
+**Estado 2026-10-01:** armazón y comprobaciones locales listas; CI remota pendiente de push. [Evidencia](docs/evidencias/F01_F03.md).
 
 <a id="f04"></a>
 
@@ -1805,4 +1811,4 @@ Se revisaron el índice, la numeración de fases y tareas, los criterios de cier
 | JWT | Token firmado que permite verificar una sesión o identidad. |
 | SSRF | Uso indebido de un servidor para consultar destinos elegidos por un atacante. |
 
-**Siguiente paso tras la preparación inicial:** ejecutar [F01.01](docs/tareas/tarea-actual.md), comprobar herramientas y continuar cuentas y pruebas de datos de F01/F02 según sus dependencias. F00 queda documentada en [el estado](docs/ESTADO.md). El siguiente objetivo verificable es H0: demostrar con consultas reales qué cobertura se consigue por 0 €, antes de construir la ficha completa.
+**Siguiente paso desde el estado actual:** seguir [F01.04](docs/tareas/tarea-actual.md), verificar Cloudflare Free y proteger Access; continuar pruebas de datos de F02. F03 aporta el armazón local, pero G-DATOS sigue siendo la puerta de viabilidad antes de construir la ficha completa. Ver [estado](docs/ESTADO.md).

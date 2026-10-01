@@ -1,0 +1,14 @@
+:root {
+  font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: #172633;
+  background: #f7f9fb;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  --ink: #172633;
+  --muted: #5b6c78;
+  --accent: #176b76;
+  --border: #dce4e9;
+}
+* { box-sizing: border-box; }
+body { min-width: 320px; margin: 0; }
