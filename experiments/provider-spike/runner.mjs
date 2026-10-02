@@ -57,12 +57,16 @@ export async function runProbes(probes, {
     if (requests > 0) await sleep(1100);
     const headers = { Accept: probe.format === 'json' ? 'application/json' : 'text/html' };
     for (const [header, key] of Object.entries(probe.credentials)) headers[header] = env[key];
+    const init = { headers, signal: AbortSignal.timeout(timeoutMs), redirect: 'error' };
+    if (probe.method === 'POST') {
+      headers['Content-Type'] = 'application/json';
+      init.method = 'POST';
+      init.body = JSON.stringify(probe.body);
+    }
     const start = performance.now();
     requests += 1;
     try {
-      const response = await fetcher(probe.url, {
-        headers, signal: AbortSignal.timeout(timeoutMs), redirect: 'error',
-      });
+      const response = await fetcher(probe.url, init);
       result.httpStatus = response.status;
       if (!response.ok) {
         await response.body?.cancel();
@@ -80,7 +84,8 @@ export async function runProbes(probes, {
       const data = probe.format === 'json' ? JSON.parse(body.text) : body.text;
       const valid = Boolean(probe.validate(data));
       results.push({ ...result, bytes: body.bytes, status: valid ? 'PROBADO' : 'FALLO',
-        reason: valid ? 'ACCESS_AND_BASIC_SHAPE_ONLY' : 'INVALID_OR_EMPTY_RESPONSE' });
+        reason: valid ? 'ACCESS_AND_BASIC_SHAPE_ONLY' :
+          probe.invalidReason ?? 'INVALID_OR_EMPTY_RESPONSE' });
     } catch (error) {
       // No imprimir mensajes del proveedor, URLs con parámetros, cabeceras ni cuerpos.
       const reason = error instanceof Error && error.message === 'RESPONSE_TOO_LARGE'

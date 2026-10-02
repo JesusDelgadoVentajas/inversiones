@@ -263,6 +263,7 @@ La reputación de una fuente no justifica mezclar instrumentos o presentar una e
 
 | Fuente | Uso propuesto | Condición antes de activarla |
 |---|---|---|
+| OpenFIGI | Identidad de instrumentos por nombre/identificadores; no cotizaciones. | Resolver alias de emisor, bolsa y clase; su [prueba local](docs/evidencias/F02_IDENTIDAD_OPENFIGI.md) no resolvió «Inditex» como acción ordinaria. |
 | Finnhub | Búsqueda, perfil, precio y algunos bloques empresariales. | Probar cada endpoint con la cuenta gratuita real y cada mercado. Una página de documentación no demuestra derecho de acceso. |
 | SEC/EDGAR | Presentaciones e información financiera de emisores que reportan en EE. UU. | Cumplir acceso automatizado; validar CIK, periodos y etiquetas contables. |
 | Alpaca Basic | Candidato para precios e históricos de acciones estadounidenses. | Comprobar acceso personal gratuito, feed solicitado y limitación temporal. |
@@ -1099,7 +1100,7 @@ F03 puede preparar estructura mientras F02 espera acceso externo. No se cierra l
 
 **Cierre:** existe una ruta de datos gratuita demostrada para el alcance aceptado. F02 es la principal puerta de viabilidad. Si falla, el informe debe evitar que se inviertan semanas en una interfaz basada en servicios inaccesibles.
 
-**Estado 2026-10-01:** sonda y pruebas sintéticas listas; solo acceso HTML local a páginas de calendario Fed/BCE demostrado. G-DATOS permanece pendiente; ver [cobertura](docs/COBERTURA.md).
+**Estado 2026-10-02:** sonda y pruebas sintéticas listas; acceso HTML local a calendarios Fed/BCE y acceso parcial a búsqueda OpenFIGI demostrados. Ni la búsqueda general por nombre ni precios, históricos y cuentas están probados. G-DATOS permanece pendiente; ver [cobertura](docs/COBERTURA.md) y [evidencia de identidad](docs/evidencias/F02_IDENTIDAD_OPENFIGI.md).
 
 <a id="f03"></a>
 

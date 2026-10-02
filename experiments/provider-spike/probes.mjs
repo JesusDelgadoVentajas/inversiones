@@ -12,6 +12,15 @@ export function createProbes({ query = 'Apple', symbol = 'AAPL', cik = '00003201
   });
   return [
     {
+      id: 'openfigi-search', provider: 'openfigi', capability: 'instrument-search',
+      url: 'https://api.openfigi.com/v3/search', method: 'POST',
+      body: { query, marketSecDes: 'Equity' },
+      credentials: {}, format: 'json', invalidReason: 'NO_MATCHING_COMMON_STOCK_ON_FIRST_PAGE',
+      validate: (body) => Array.isArray(body?.data) && body.data.some((item) =>
+        item.securityType2 === 'Common Stock' && typeof item.figi === 'string' &&
+        typeof item.name === 'string' && item.name.toLowerCase().includes(query.toLowerCase())),
+    },
+    {
       id: 'fed-calendar', provider: 'federal-reserve', capability: 'calendar-resource',
       url: 'https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm',
       credentials: {}, format: 'html',

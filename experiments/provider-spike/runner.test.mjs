@@ -86,3 +86,23 @@ test('la SEC requiere un contacto y no acepta otro emisor como resultado', async
   assert.equal(report.results[0].reason, 'SEC_CONTACT_REQUIRED');
   assert.equal(sec.validate({ cik: '9999999999', filings: { recent: { accessionNumber: ['synthetic'] } } }), false);
 });
+
+test('OpenFIGI usa POST limitado y no da por válida una página solo de derivados', async () => {
+  const openfigi = createProbes({ query: 'Inditex' }).find((item) => item.id === 'openfigi-search');
+  const report = await runProbes([openfigi], { ...options, fetcher: async (url, init) => {
+    assert.equal(url, 'https://api.openfigi.com/v3/search');
+    assert.equal(init.method, 'POST');
+    assert.equal(init.headers['Content-Type'], 'application/json');
+    assert.deepEqual(JSON.parse(init.body), { query: 'Inditex', marketSecDes: 'Equity' });
+    return Response.json({ data: [{ name: 'Inditex', securityType2: 'Future', figi: 'SYNTHETIC' }] });
+  } });
+  assert.equal(report.requests, 1);
+  assert.equal(report.results[0].reason, 'NO_MATCHING_COMMON_STOCK_ON_FIRST_PAGE');
+  assert.equal(JSON.stringify(report).includes('SYNTHETIC'), false);
+  assert.equal(openfigi.validate({ data: [
+    { name: 'Otra empresa', securityType2: 'Common Stock', figi: 'SYNTHETIC' },
+  ] }), false);
+  assert.equal(openfigi.validate({ data: [
+    { name: 'INDITEX SA', securityType2: 'Common Stock', figi: 'SYNTHETIC' },
+  ] }), true);
+});
