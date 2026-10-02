@@ -1,6 +1,6 @@
 # Contratos y API
 
-**Versión de diseño:** `v1`. **Estado 2026-10-02:** contratos, persistencia y rutas de búsqueda/perfil/precio/histórico implementados y probados localmente con fuentes sintéticas. La configuración distribuida mantiene el acceso cerrado y ningún proveedor real activo. El código de validación está en `app/shared/contracts/` y las cinco migraciones en `app/migrations/`.
+**Versión de diseño:** `v1`. **Estado 2026-10-03:** rutas de búsqueda/perfil/precio/histórico/cuentas/métricas/noticias implementadas y probadas localmente con fuentes sintéticas. La configuración distribuida mantiene el acceso cerrado y ningún proveedor real activo. El código de validación está en `app/shared/contracts/` y las cinco migraciones en `app/migrations/`.
 
 ## Identidad y datos
 
@@ -16,15 +16,18 @@ Cada `DataBlock<T>` contiene `status`, `data`, `provenance[]`, `servedAt`, `from
 
 **Públicas en local:** `GET /api/health` y `GET /api/v1/health` devuelven `status`, `liveData`, `searchAvailable` y `message`; con la configuración actual indican preparación sin datos. `GET /api/example` devuelve solo una cotización nula sintética. Toda ruta `/api/v1/*` distinta de salud exige JWT de Access incluso con `APP_READY=false`. Sin configuración, devuelve `503 ACCESS_NOT_CONFIGURED`; sin token, `401 ACCESS_TOKEN_MISSING`; con token inválido o identidad ajena, `403 ACCESS_DENIED`. Con identidad válida y la aplicación inactiva, devuelve `503 APP_NOT_READY`.
 
-**Implementadas en F07/F08**, siempre detrás de Access y de `APP_READY=true`; sin `ALLOW_LIVE_PROVIDERS=true` se usa un registro vacío:
+**Implementadas en F07–F10**, siempre detrás de Access y de `APP_READY=true`; sin `ALLOW_LIVE_PROVIDERS=true` se usa un registro vacío:
 
 | Método y ruta | Parámetros y límites | Resultado |
 |---|---|---|
-| `GET /api/v1/capabilities` | Sin entrada libre de proveedor. | Booleanos `search`, `quote`, `history`, según registro, métodos y permiso de retención. El detalle por mercado se añadirá al aprobar fuentes. |
+| `GET /api/v1/capabilities` | Sin entrada libre de proveedor. | Booleanos `search`, `quote`, `history`, `financials`, `news`, según registro, métodos y permiso de retención. El detalle por mercado se añadirá al aprobar fuentes. |
 | `GET /api/v1/search?q=` | Un único `q`, normalizado NFC y espacios, 2–80 caracteres Unicode; sin controles/invisibles; máximo 20 candidatos. | `DataBlock<SearchCandidate[]>`, empresas e instrumentos separados; sin mapeos externos en el cliente. |
 | `GET /api/v1/listings/:id/profile` | UUID de listing. | Identidad y fuentes. |
 | `GET /api/v1/listings/:id/quote` | UUID de listing. | `DataBlock<Quote>`. |
 | `GET /api/v1/listings/:id/prices?range=` | UUID; rango `1m`, `3m`, `1y` (predeterminado), `5y` o `max`, sujeto a cobertura; sin otros parámetros. | `DataBlock<PriceHistory>`: rango, rangos disponibles, unidad, feed, resolución, ajuste y 1–2.000 barras homogéneas. |
+| `GET /api/v1/companies/:id/financials` | UUID de emisor, sin parámetros libres. | `DataBlock<FinancialFact[]>`, máximo 1.000 hechos y 2 MB; tabla cliente de 40 filas. |
+| `GET /api/v1/listings/:id/metrics` | UUID de instrumento, sin otros parámetros. | `DataBlock<Metric[]>`: 32 métricas o bloque ausente; estado/motivo, versión e inputs por cálculo. |
+| `GET /api/v1/companies/:id/news?kind=&cursor=` | Tipo all/corporate/independent/regulatory/sector/macro; cursor opcional base64url ≤700, sin duplicados ni otros parámetros. | `DataBlock<NewsPage>`: hasta 20 artículos, siguiente cursor y corte temporal, sobre ventana de hasta 200. |
 
 `profile` devuelve `{company, listing, sources: [{provider, verifiedAt}]}` desde identidad D1 verificada; no depende de caché financiera. La búsqueda guarda esas identidades solo si el registro permite retenerlas; el cliente selecciona un UUID y no puede enviar un emisor o mapeo arbitrario. [Decisión D009](DECISIONES.md#d009--identidad-verificada-y-vistas-locales-antes-de-activar-datos). Un adaptador debe reutilizar IDs estables de su fuente y comprobar emisor/mercado/clase: el contrato validado no demuestra que su contenido externo sea verdadero.
 
@@ -34,9 +37,6 @@ La cotización admite `previousClose` nulo o con unidad, feed, instante, base de
 
 | Método y ruta | Parámetros y límites previstos | Resultado |
 |---|---|---|
-| `GET /api/v1/companies/:id/financials` | UUID de emisor; paginación por periodo cuando haga falta. | Hechos y documentos. |
-| `GET /api/v1/listings/:id/metrics` | UUID de listing. | Métricas con entradas y versiones. |
-| `GET /api/v1/companies/:id/news?cursor=` | UUID; cursor opaco, máximo 20 elementos. | Noticias originales y siguiente cursor. |
 | `GET /api/v1/companies/:id/events?listingId=` | UUID de emisor/listing compatible. | Eventos confirmados o ausencias justificadas. |
 | `GET /api/v1/macro?regions=` | Códigos de región admitidos, máximo 4. | Eventos macro oficiales. |
 | `GET /api/v1/companies/:id/peers` | UUID de emisor, máximo 3 comparables automáticos. | Motivo de cada relación. |
@@ -44,6 +44,17 @@ La cotización admite `previousClose` nulo o con unidad, feed, instante, base de
 | `POST /api/v1/refresh` | Un bloque y UUID compatibles, cuerpo ≤4 KiB; sin URL libre. | Bloque comprobado una vez dentro de cuota. |
 
 Las rutas futuras constituyen un contrato de implementación. Las ya implementadas tampoco demuestran cobertura externa: el registro real sigue vacío. Una identidad no encontrada da 404; un bloque conocido sin cobertura puede devolver 200 con `status: unavailable` y `reasonCode`. Parámetros inválidos dan 400, métodos no admitidos 405 con `Allow: GET`, falta de sesión 401, identidad ajena 403 y fallo no previsto del servicio 503 saneado. Los límites de proveedor aparecen en el bloque correspondiente. Cualquier ruta API desconocida devuelve JSON, nunca el HTML de la SPA.
+
+
+## Cuentas, métricas y noticias
+
+Los hechos conservan fecha civil `filedDate` o instante auténtico `filedAt`, criterio contable, atribución, etiqueta, accession y base por acción. Si solo hay fecha, no se fabrica hora. Cada métrica mantiene unidad, emisor/listing, periodo y procedencia por entrada; estado individual disponible/antiguo/no aplicable/ausente. La API de métricas carga bloques independientes y conserva ausencias; no promete 32 valores en toda empresa. [Convenciones y límites](METRICAS.md).
+
+Cotizaciones: `sessionVolume` y `capitalization` opcionales/nulos. Capitalización incluye emisor, valor en moneda mayor, cobertura de todas las clases comunes, observación y fuente propios. No se extrae de un balance. El histórico incluye `coverage: complete | partial | unknown`; por defecto desconocida. Solo cobertura completa acreditada habilita métricas anuales.
+
+La ventana de noticias usa relación verificada con UUID del emisor, tipo explícito, idioma y publicación original; fecha civil conserva precisión desconocida. `dateKind` distingue publicación de presentación regulatoria; recepción EDGAR no se convierte en publicación. El cursor se valida antes de consumir cuota y nunca se reenvía a una API ajena. Su fecha de corte no congela correcciones/descubrimientos posteriores. No hay consultas automáticas de esta sección. [Política de noticias](NOTICIAS.md).
+
+Los agregados tienen plazo compartido de 20 segundos y usan ejecutor/cuotas/caché del adaptador aprobado. No guardan datos financieros nuevos en D1 por sí solos. Una fuente debe acreditar derechos de conservación antes de cachear. Los límites de contrato producen fallo explícito, no truncado silencioso.
 
 ## Errores y seguridad
 

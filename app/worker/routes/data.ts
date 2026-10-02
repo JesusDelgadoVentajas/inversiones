@@ -6,33 +6,31 @@ import { readProfile, saveIdentity } from '../identity/store.js'
 import type { RegisteredProvider } from '../providers/registry.js'
 import { emptyBlock, loadProviderBlock } from '../services/provider-block.js'
 import { apiError } from './errors.js'
+import { privateJson } from './json.js'
+import { researchRoute, serveResearch } from './research.js'
 
 export function createDataApi(db: D1Database | undefined, providers: readonly RegisteredProvider[]) {
   return async (request: Request, requestId: string): Promise<Response> => {
     const url = new URL(request.url)
     const match = url.pathname.match(/^\/api\/v1\/listings\/([^/]+)\/(profile|quote|prices)$/)
-    if (!match && !['/api/v1/search', '/api/v1/capabilities'].includes(url.pathname)) {
+    if (!match && !researchRoute(url.pathname) && !['/api/v1/search', '/api/v1/capabilities'].includes(url.pathname)) {
       return apiError(404, 'NOT_FOUND', 'Ruta no disponible.', requestId)
     }
-    const json = (body: unknown) => {
-      const encoded = JSON.stringify(body)
-      if (new TextEncoder().encode(encoded).length > 2_000_000) {
-        return apiError(503, 'RESPONSE_TOO_LARGE', 'La respuesta supera el tamaño admitido.', requestId)
-      }
-      return new Response(encoded, { headers: { 'Cache-Control': 'private, no-store',
-        'Content-Type': 'application/json; charset=utf-8' } })
-    }
+    const json = (body: unknown) => privateJson(body, requestId)
     if (request.method !== 'GET') {
       const response = apiError(405, 'METHOD_NOT_ALLOWED', 'Método no disponible.', requestId)
       response.headers.set('Allow', 'GET')
       return response
     }
+    if (researchRoute(url.pathname)) return serveResearch(request, requestId, db, providers)
     const context = { requestId, signal: request.signal }
     if (url.pathname === '/api/v1/capabilities') {
-      return json(Object.fromEntries((['search', 'quote', 'history'] as const).map((capability) =>
-        [capability, providers.some(({ adapter, identityRetentionAllowed }) => adapter.capabilities.has(capability) &&
-          (capability === 'search' ? identityRetentionAllowed && !!adapter.search :
-            capability === 'quote' ? !!adapter.quote : !!adapter.history))])))
+      return json({
+        search: providers.some(({ adapter, identityRetentionAllowed }) => identityRetentionAllowed &&
+          adapter.capabilities.has('search') && !!adapter.search),
+        ...Object.fromEntries((['quote', 'history', 'financials', 'news'] as const).map((capability) =>
+          [capability, providers.some(({ adapter }) => adapter.capabilities.has(capability) && !!adapter[capability])])),
+      })
     }
     if (url.pathname === '/api/v1/search') {
       const query = searchQuerySchema.safeParse(url.searchParams.get('q'))

@@ -1,4 +1,5 @@
 import { companySchema, listingSchema } from '../../shared/contracts/identity.js'
+import type { Company } from '../../shared/contracts/identity.js'
 import { profileSchema, verifiedCandidateSchema } from '../../shared/contracts/search.js'
 import type { Profile, VerifiedCandidate } from '../../shared/contracts/search.js'
 
@@ -54,22 +55,28 @@ export async function readProfile(db: D1Database, listingId: string): Promise<Pr
     instrument: string; share_class: string; status: string; time_zone: string | null
   }>()
   if (!listing) return null
-  const company = await db.prepare('SELECT * FROM companies WHERE id=?').bind(listing.company_id).first<{
-    id: string; legal_name: string; aliases_json: string; country: string | null;
-    sector: string | null; website: string | null; identifiers_json: string
-  }>()
+  const company = await readCompany(db, listing.company_id)
   if (!company) throw new Error('IDENTITY_INVALID')
   const mappings = await db.prepare(`SELECT provider,verified_at FROM provider_mappings
     WHERE listing_id=? AND verified_at IS NOT NULL`).bind(listingId)
     .all<{ provider: string; verified_at: string }>()
   return profileSchema.parse({
-    company: companySchema.parse({ id: company.id, legalName: company.legal_name,
-      aliases: JSON.parse(company.aliases_json), country: company.country, sector: company.sector,
-      website: company.website, identifiers: JSON.parse(company.identifiers_json) }),
+    company,
     listing: listingSchema.parse({ id: listing.id, companyId: listing.company_id,
       symbol: listing.symbol, mic: listing.mic, currency: listing.currency,
       instrument: listing.instrument, shareClass: listing.share_class || null,
       status: listing.status, timeZone: listing.time_zone }),
     sources: mappings.results.map((mapping) => ({ provider: mapping.provider, verifiedAt: mapping.verified_at })),
   })
+}
+
+export async function readCompany(db: D1Database, id: string): Promise<Company | null> {
+  const company = await db.prepare('SELECT * FROM companies WHERE id=?').bind(id).first<{
+    id: string; legal_name: string; aliases_json: string; country: string | null;
+    sector: string | null; website: string | null; identifiers_json: string
+  }>()
+  if (!company) return null
+  return companySchema.parse({ id: company.id, legalName: company.legal_name,
+      aliases: JSON.parse(company.aliases_json), country: company.country, sector: company.sector,
+      website: company.website, identifiers: JSON.parse(company.identifiers_json) })
 }

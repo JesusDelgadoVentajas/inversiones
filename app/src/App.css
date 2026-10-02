@@ -53,3 +53,13 @@ th, td { text-align: left; padding: 12px; border-bottom: 1px solid var(--border)
 td { font-variant-numeric: tabular-nums; }
 .table-pages { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 12px; }
 @media (max-width: 480px) { .search-panel, .data-panel { padding: 20px; } }
+.section-tabs { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+.section-tabs [aria-pressed="true"] { background: var(--ink); color: #fff; }
+.metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(230px, 100%), 1fr)); gap: 16px; margin: 24px 0; }
+.metric-card { min-width: 0; padding: 16px; border: 1px solid var(--border); border-radius: 12px; }
+.metric-card h3 { font-size: 1rem; margin: 0; }
+.metric-value { font-size: 1.5rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.metric-card ul { padding-left: 18px; overflow-wrap: anywhere; line-height: 1.5; }
+.news-list { list-style: none; padding: 0; }
+.news-list li { padding: 24px 0; border-bottom: 1px solid var(--border); }
+.news-list h3 { margin: 0; overflow-wrap: anywhere; }

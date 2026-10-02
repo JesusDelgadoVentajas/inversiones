@@ -2,7 +2,7 @@ import { setTimeout as delay } from 'node:timers/promises';
 
 const contentTypes = { json: 'application/json', html: 'text/html', ics: 'text/calendar' };
 
-async function readLimited(response, maxBytes) {
+export async function readLimited(response, maxBytes) {
   const reader = response.body?.getReader();
   if (!reader) return { text: '', bytes: 0 };
   const chunks = [];

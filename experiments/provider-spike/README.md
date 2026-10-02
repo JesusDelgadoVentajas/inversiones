@@ -43,3 +43,16 @@ También existen `stocklake-quote`, `stocklake-history` y `stocklake-news`; aña
 No colocar claves en comandos, repositorio o resultados compartidos. El modo vivo exige casos explícitos y un máximo de 1–10 solicitudes; aplica pausa, timeout, límite de respuesta y detiene un proveedor tras 401/403/429. El handshake no sustituye la cuota del proveedor: respetar el límite diario documentado y no repetir ensayos sin motivo. Las salidas se reducen a estado, tiempo, tamaño y metadatos definidos; no guardan precios, importes, titulares, cuerpos ni credenciales. La CLI devuelve 2 si una ejecución viva incluye casos fallidos/omitidos; conserva su informe para diagnosticar, sin publicarlo como cobertura aceptada.
 
 Después de cada prueba, registrar por separado proveedor, endpoint, fecha, plan, país, instrumento, feed, divisa, retraso, licencias, límites, costes y resultado en [COBERTURA](../../docs/COBERTURA.md). Una respuesta 200 no basta para marcar una capacidad como cubierta. No utilizar la sonda para rellenar la aplicación.
+
+
+## Contraste SEC/TGM de cuentas
+
+Auditor independiente opcional, sin activar adaptadores:
+
+```sh
+node --env-file=.local/f01-f08-continuation/sec.env experiments/provider-spike/statement-audit.mjs --live --symbol=AAPL --symbol=MSFT --symbol=NVDA --max-requests=16
+```
+
+Desde esta máquina; en otra preparar contacto auténtico por vía privada. Entre 1 y 80 HTTP como presupuesto explícito, 1–5 símbolos de ensayo, pausa de 1,1 s, timeout y 2 MB. Cuenta consultas TGM y SEC; sin --live no se ejecuta. No incluye noticia/precio/histórico ni acceso Worker. Coteja moneda/periodo/documento/presentación y ocho importes por empresa. Reporte de coincidencia/discrepancia sin cuerpos, cifras ni contacto. No repetir si no hay duda concreta; el ensayo no certifica retención o 20 métricas adicionales. [Evidencia](../../docs/evidencias/F02_F09_F10.md).
+
+El [comprobador de métricas](../../app/scripts/check-primary-reference.mjs) usa únicamente casos SEC privados y oráculos preparados aparte; instrucciones en [app/README](../../app/README.md#contraste-primario-local). Las pruebas automáticas de ambos usan datos sintéticos y no consumen cuota.

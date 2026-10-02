@@ -74,7 +74,7 @@ describe('búsqueda y ficha en D1 local con proveedor sintético', () => {
     const adapter: ProviderAdapter = { id: 'synthetic-provider', capabilities: new Set(['search', 'quote', 'history']), search }
     const api = createDataApi(dataDb, [{ adapter, identityRetentionAllowed: false }])
     expect(await (await api(new Request('https://local.test/api/v1/capabilities'), requestId)).json())
-      .toEqual({ search: false, quote: false, history: false })
+      .toEqual({ search: false, quote: false, history: false, financials: false, news: false })
     await api(new Request('https://local.test/api/v1/search?q=Empresa'), requestId)
     expect(search).not.toHaveBeenCalled()
   })

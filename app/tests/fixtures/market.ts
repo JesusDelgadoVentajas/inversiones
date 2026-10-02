@@ -20,6 +20,7 @@ export function candidate(name = 'Empresa sintética'): VerifiedCandidate {
 export const history: PriceHistory = {
   listingId, range: '1y', availableRanges: ['1y'], adjustment: 'split_adjusted',
   resolution: 'day', unit: quote.unit, feed: 'test',
+  coverage: 'unknown',
   bars: ['2026-09-25', '2026-09-28'].map((day, index) => ({
     listingId, startsAt: `${day}T08:00:00Z`, endsAt: `${day}T16:30:00Z`,
     resolution: 'day', open: null, high: null, low: null, close: index === 0 ? '10' : '12.34',

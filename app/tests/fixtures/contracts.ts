@@ -18,6 +18,8 @@ export const quote = {
   observedAt: '2026-10-02T09:59:00Z', session: 'regular', feed: 'test',
   coverage: 'Fixture sintético sin mercado real',
   previousClose: null,
+  sessionVolume: null,
+  capitalization: null,
 } satisfies Quote
 
 export const quoteBlock = {

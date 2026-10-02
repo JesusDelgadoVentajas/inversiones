@@ -6,10 +6,26 @@ export const newsItemSchema = z.object({
   title: z.string().trim().min(1).max(300),
   url: httpsUrl,
   source: z.string().min(1).max(120),
-  publishedAt: utcInstant,
+  publishedAt: utcInstant.nullable().default(null),
+  publishedDate: civilDate.nullable().default(null),
+  dateKind: z.enum(['publication', 'filing']).default('publication'),
+  language: z.string().regex(/^[a-z]{2,3}(?:-[A-Za-z0-9]{2,8})*$/).default('und'),
+  kind: z.enum(['corporate', 'independent', 'regulatory', 'sector', 'macro']),
+  relationKind: z.enum(['verified_issuer', 'verified_provider', 'explicit_reference']),
   companyIds: z.array(stableId).min(1).max(20),
   relationReason: z.string().min(1).max(240),
+}).refine((item) => (item.publishedAt !== null || item.publishedDate !== null) &&
+  (!item.publishedAt || !item.publishedDate || item.publishedAt.slice(0, 10) === item.publishedDate), {
+  message: 'Fecha original de publicación ausente o incompatible.',
 })
+
+export const newsPageSchema = z.object({
+  items: z.array(newsItemSchema).max(20),
+  nextCursor: z.string().regex(/^[A-Za-z0-9_-]{1,700}$/).nullable(),
+  snapshotAt: utcInstant,
+})
+export const newsKindSchema = z.enum(['all', 'corporate', 'independent', 'regulatory', 'sector', 'macro'])
+export type NewsPage = z.infer<typeof newsPageSchema>
 
 export const eventSchema = z.object({
   id: stableId,

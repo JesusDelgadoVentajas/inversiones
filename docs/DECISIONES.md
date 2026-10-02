@@ -84,6 +84,17 @@ Este registro conserva decisiones y motivos. El avance operativo se mantiene en 
 - **Motivo:** crear y consultar D1 mediante la sesión autorizada de Wrangler no publica un Worker ni una API accesible por el navegador; puede hacerse sin las entradas de Access que faltan. Workers Free fue confirmado por el propietario y se revisaron los límites D1 antes de crear las bases, sin cambio de plan.
 - **Consecuencia:** sustituye el estado de bindings vacíos de D007 una vez conocidos los IDs. No cambia el resto de su protección: flags en falso, registro de proveedores vacío y ninguna publicación. Las cinco migraciones y las nueve tablas vacías se verificaron en ambas bases; esto no cierra G-ACCESO ni demuestra llamadas financieras desde Cloudflare. [Evidencia](evidencias/F01_F08_CONTINUACION.md).
 
+<a id="d011--fechas-precisas-y-calculos-conservadores-en-f09f10"></a>
+
+## D011 — Fechas precisas y cálculos conservadores en F09/F10
+
+- **Fecha:** 2026-10-03.
+- **Estado:** ADOPTADA PARA IMPLEMENTACIÓN LOCAL; ACEPTACIÓN REMOTA PENDIENTE.
+- **Decisión:** separar fecha civil e instante auténtico en cuentas/noticias. Con solo día de presentación, no afirmar conocimiento histórico dentro de ese día. Mapeos, revisiones, unidades, bases y atribuciones verificables; ausencia ante ambigüedad. Sin sumar EPS trimestral ni inferir deuda/capitalización de sustitutos.
+- **Fuentes:** conceptos SEC y formularios de cuentas admitidos. TGM puede referenciar otro formulario aunque coincida la cifra; no ampliar el parser por ello. Referencias primarias independientes; ningún cuerpo comercial crudo en Git.
+- **Noticias:** identidad verificada, tipo explícito y URL segura. Deduplicar URL; conservar enlaces diferentes hasta demostrar equivalencia. Cursor de app sobre ventana acotada, sin reenviarlo a terceros; corte temporal sin prometer congelar el corpus.
+- **Consecuencia:** API/UI local antes de aprobar adaptadores, conservando D009 y flags inertes. Fuentes, derechos, cuota y Worker reales pendientes. [Métricas](METRICAS.md), [noticias](NOTICIAS.md), [evidencia](evidencias/F02_F09_F10.md).
+
 ## Añadir una decisión
 
 Usa el siguiente ID disponible y registra fecha, estado, decisión, motivo y consecuencias. Si cambias una decisión anterior, conserva su historia y enlaza la que la sustituye. Documenta decisiones relevantes o desviaciones; no conviertas cada elección rutinaria de implementación en un trámite.

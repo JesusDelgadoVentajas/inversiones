@@ -1031,8 +1031,8 @@ Cada fase tiene un resultado concreto. El orden siguiente es el recomendado para
 | [F06](#f06) | Adaptadores, caché y presupuesto. | F02, F04, F05. | EN CURSO; capa sintética lista, proveedores no aprobados. |
 | [F07](#f07) | Búsqueda e identidad. | F06. | EN CURSO; flujo local sintético, búsqueda real pendiente. |
 | [F08](#f08) | Precios e históricos. | F07. | EN CURSO; vistas/cálculo locales, datos reales pendientes. |
-| [F09](#f09) | Cuentas y métricas. | F07, F08. | PENDIENTE |
-| [F10](#f10) | Noticias. | F07. | PENDIENTE |
+| [F09](#f09) | Cuentas y métricas. | F07, F08. | EN CURSO; motor/API/UI locales, aceptación real pendiente. |
+| [F10](#f10) | Noticias. | F07. | EN CURSO; contrato/API/UI locales, fuentes pendientes. |
 | [F11](#f11) | Eventos y calendario macro. | F07. | PENDIENTE |
 | [F12](#f12) | Competidores y comparativas. | F08, F09, F10. | PENDIENTE |
 | [F13](#f13) | Interfaz completa y accesibilidad. | F08–F12. | PENDIENTE |
@@ -1214,14 +1214,16 @@ F03 puede preparar estructura mientras F02 espera acceso externo. No se cierra l
 ### F09. Implementar cuentas y métricas
 
 - [ ] F09.01 — Integrar publicaciones y hechos contables con documento, presentación y periodo.
-- [ ] F09.02 — Implementar mapeos de conceptos y tratamiento de cuentas corregidas.
-- [ ] F09.03 — Derivar trimestres y TTM correctamente; mantener balances como datos instantáneos.
-- [ ] F09.04 — Implementar el catálogo M01–M32 y sus condiciones de aplicabilidad.
-- [ ] F09.05 — Construir métricas con inputs compatibles de emisor, listing, moneda y fecha.
-- [ ] F09.06 — Añadir explicaciones comprensibles y motivos de ausencia.
+- [x] F09.02 — Implementar mapeos de conceptos y tratamiento de cuentas corregidas.
+- [x] F09.03 — Derivar trimestres y TTM correctamente; mantener balances como datos instantáneos.
+- [x] F09.04 — Implementar el catálogo M01–M32 y sus condiciones de aplicabilidad.
+- [x] F09.05 — Construir métricas con inputs compatibles de emisor, listing, moneda y fecha.
+- [x] F09.06 — Añadir explicaciones comprensibles y motivos de ausencia.
 - [ ] F09.07 — Revisar manualmente cifras de referencia y documentar las discrepancias.
 - [ ] F09.08 — Probar los casos contables de la sección 10 y medir CPU/payload en móvil.
 - [ ] F09.09 — Confirmar al menos 20 métricas adicionales válidas en varias empresas representativas del alcance.
+
+**Estado 2026-10-03:** mapeo US GAAP acotado, correcciones, trimestres/TTM, catálogo M01–M32, compatibilidad y explicaciones implementados y probados localmente. Los ticks F09.02–F09.06 acreditan ese ámbito; IFRS y mapeos específicos de otros emisores siguen pendientes. Contraste local SEC/TGM: 24 importes y cinco métricas por Apple/Microsoft/NVIDIA, con una diferencia documental explicada. F09.01 sigue abierta sin adaptador aprobado; F09.07 tiene referencias preparadas pero falta aceptación del alcance; F09.08 carece de CPU remota/teléfono real; F09.09 no se cumple con datos reales. [Evidencia](docs/evidencias/F02_F09_F10.md), [convenciones](docs/METRICAS.md).
 
 **Cierre G-CIFRAS:** cálculos reproducibles, fuentes consultables y ninguna mezcla silenciosa de periodos, escalas o instrumentos.
 
@@ -1232,10 +1234,12 @@ F03 puede preparar estructura mientras F02 espera acceso externo. No se cierra l
 - [ ] F10.01 — Integrar fuentes aprobadas con URL y fecha originales.
 - [ ] F10.02 — Identificar la relación con la empresa y filtrar homónimos.
 - [ ] F10.03 — Eliminar duplicados sin borrar artículos distintos sobre el mismo acontecimiento.
-- [ ] F10.04 — Separar comunicado corporativo, noticia independiente y contexto.
+- [x] F10.04 — Separar comunicado corporativo, noticia independiente y contexto.
 - [ ] F10.05 — Añadir filtros y paginación que respeten las cuotas.
-- [ ] F10.06 — Sanear texto, enlaces y formatos externos.
-- [ ] F10.07 — Probar noticias antiguas encontradas hoy, zona horaria ausente y fuente caída.
+- [x] F10.06 — Sanear texto, enlaces y formatos externos.
+- [x] F10.07 — Probar noticias antiguas encontradas hoy, zona horaria ausente y fuente caída.
+
+**Estado 2026-10-03:** clasificación explícita, saneado y pruebas de antigüedad/zona/fallo completos en local con datos sintéticos. Filtrado por identidades verificadas y paginación local preparados, pero la identificación real y cuota del adaptador siguen pendientes (F10.02/F10.05). Deduplicación por URL implementada; semejanza de titulares pendiente (F10.03). Ninguna fuente activa (F10.01). [Política](docs/NOTICIAS.md) y [evidencia](docs/evidencias/F02_F09_F10.md).
 
 **Cierre:** titulares relevantes y trazables; no existe copia indiscriminada de artículos ni sentimiento inventado.
 

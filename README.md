@@ -2,7 +2,7 @@
 
 Proyecto de aplicación personal para buscar empresas cotizadas por su nombre y consultar precios, cuentas, métricas, noticias, competidores y eventos con fuentes y fechas visibles.
 
-**Estado:** búsqueda por nombre, selección de instrumento, ficha de precio e histórico preparados y probados localmente con datos sintéticos; contratos, JWT y capa común de proveedores comprobados. Las D1 privadas de staging y producción están creadas y migradas en Cloudflare. No hay datos financieros reales en la aplicación, Access activo ni Worker desplegado. El presupuesto objetivo de servicios es 0 € y aún no se ha demostrado para el producto completo.
+**Estado:** búsqueda por nombre, selección de instrumento, fichas de precio/histórico/cuentas/métricas/noticias preparadas y probados localmente con datos sintéticos; contratos, JWT, motor contable y capa común comprobados. Quince referencias contables SEC verificadas para tres empresas, sin activar proveedores. Las D1 privadas de staging y producción están creadas y migradas en Cloudflare. No hay datos financieros reales en la aplicación, Access activo ni Worker desplegado. El presupuesto objetivo de servicios es 0 € y aún no se ha demostrado para el producto completo.
 
 ## Dónde empezar
 
@@ -14,6 +14,7 @@ Proyecto de aplicación personal para buscar empresas cotizadas por su nombre y 
 | Conocer los criterios de código y pruebas | [Calidad](docs/ia/CALIDAD.md). |
 | Saber por qué se tomó una decisión | [Registro de decisiones](docs/DECISIONES.md). |
 | Revisar fuentes y huecos de datos | [Cobertura](docs/COBERTURA.md) y [proveedores](docs/PROVEEDORES.md). |
+| Revisar cálculos y noticias | [Métricas](docs/METRICAS.md) y [noticias](docs/NOTICIAS.md). |
 | Entender contratos, rutas y acceso futuro | [API](docs/API.md) y [despliegue](docs/DESPLIEGUE.md). |
 | Preparar una tarea nueva | [Plantilla de tarea](docs/tareas/PLANTILLA.md). |
 
@@ -63,12 +64,12 @@ npm run dev
 
 Abrir la URL local que imprima Vite, también desde un móvil en la misma red si se configura el servidor para escuchar en esa red. Chromium se instala para las pruebas, no se necesita para arrancar la web. Para todas las verificaciones locales: `npm run check`. Los comandos y su alcance están en [app/README.md](app/README.md). La pantalla normal sigue en preparación con búsqueda desactivada; las vistas se ejercitan con datos sintéticos en Playwright. `GET /api/health` y `GET /api/example` no entregan precios reales.
 
-El repositorio [GitHub público](https://github.com/JesusDelgadoVentajas/inversiones) está creado, pero aún vacío por falta de push. D1 se ha comprobado en local y en ambas bases remotas; Access, sesión real y Worker remoto siguen pendientes. Las sondas SEC/Stocklake/TGMCharts solo prueban acceso local y metadatos, sin activar proveedores. Consultar [estado](docs/ESTADO.md) antes de proseguir.
+El repositorio [GitHub público](https://github.com/JesusDelgadoVentajas/inversiones) está creado; esta entrega permanece en commits locales. D1 se ha comprobado en local y en ambas bases remotas; Access, sesión real y Worker remoto siguen pendientes. Las sondas son locales; SEC/TGM añaden contrastes contables acotados, sin activar proveedores ni demostrar acceso Cloudflare. Consultar [estado](docs/ESTADO.md) antes de proseguir.
 
 ## Mantenimiento de la documentación
 
 El plan define requisitos y aceptación; `ESTADO.md` registra el avance actual; `DECISIONES.md` conserva decisiones y motivos; la tarea actual concreta el trabajo siguiente. Cada dato tiene una ubicación principal: enlaza su origen en vez de copiarlo y crear versiones contradictorias.
 
-Las [comprobaciones de la preparación](docs/evidencias/PREPARACION_IA.md), [las de F01–F03](docs/evidencias/F01_F03.md), [las de F04–F06](docs/evidencias/F04_F06.md), [el avance hasta F08](docs/evidencias/F02_F08.md) y [la continuación con D1 remotas y sondas](docs/evidencias/F01_F08_CONTINUACION.md) documentan el alcance de las revisiones.
+Las [comprobaciones de la preparación](docs/evidencias/PREPARACION_IA.md), [las de F01–F03](docs/evidencias/F01_F03.md), [las de F04–F06](docs/evidencias/F04_F06.md), [el avance hasta F08](docs/evidencias/F02_F08.md) y [la continuación con D1 remotas y sondas](docs/evidencias/F01_F08_CONTINUACION.md) y [la continuación F02/F09/F10](docs/evidencias/F02_F09_F10.md) documentan el alcance de las revisiones.
 
 Referencias de la configuración del agente: [AGENTS.md en Codex](https://learn.chatgpt.com/docs/agent-configuration/agents-md) y [skills del repositorio](https://learn.chatgpt.com/docs/build-skills). Los nombres de comandos y rutas de descubrimiento deben contrastarse con el cliente instalado si cambia su comportamiento.

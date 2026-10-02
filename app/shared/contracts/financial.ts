@@ -17,6 +17,11 @@ export const quoteSchema = z.object({
   session: z.enum(['regular', 'pre_market', 'after_hours', 'closed', 'unknown']),
   feed: z.string().min(1).max(80),
   coverage: z.string().min(1).max(160),
+  sessionVolume: nonNegativeDecimal.nullable().default(null),
+  capitalization: z.object({
+    companyId: stableId, value: nonNegativeDecimal, currency: z.string().regex(/^[A-Z]{3}$/),
+    scope: z.literal('all_common_classes'), observedAt: utcInstant, provenance: provenanceSchema,
+  }).nullable().default(null),
   previousClose: z.object({
     listingId: stableId, price: nonNegativeDecimal,
     unit: monetaryUnit, observedAt: utcInstant, feed: z.string().min(1).max(80),
@@ -63,6 +68,7 @@ export const historySchema = z.object({
   availableRanges: priceRangeSchema.array().min(1).max(5),
   adjustment: z.enum(['raw', 'split_adjusted', 'total_return']),
   resolution: z.enum(['minute', 'hour', 'day', 'week', 'month']),
+  coverage: z.enum(['complete', 'partial', 'unknown']).default('unknown'),
   unit: monetaryUnit, feed: z.string().min(1).max(80),
   bars: priceBarSchema.array().min(1).max(2000),
 }).superRefine((history, context) => {
@@ -85,7 +91,16 @@ export const financialFactSchema = z.object({
   periodType: z.enum(['instant', 'duration']),
   periodStart: civilDate.nullable(),
   periodEnd: civilDate,
-  filedAt: utcInstant,
+  filedAt: utcInstant.nullable().default(null),
+  filedDate: civilDate.nullable().default(null),
+  basis: z.enum(['us-gaap', 'ifrs', 'unknown']).default('unknown'),
+  attribution: z.enum(['issuer', 'parent', 'common', 'unknown']).default('unknown'),
+  listingId: stableId.nullable().default(null),
+  shareBasis: z.enum(['verified_current', 'unknown']).default('unknown'),
+  sourceTag: z.string().max(200).nullable().default(null),
+  accession: z.string().regex(/^\d{10}-\d{2}-\d{6}$/).nullable().default(null),
+  conceptPriority: z.number().int().min(0).max(20).default(0),
+  semantics: z.string().min(1).max(80).default('reported'),
   documentUrl: httpsUrl,
   provenance: provenanceSchema,
 }).superRefine((fact, context) => {
@@ -95,6 +110,11 @@ export const financialFactSchema = z.object({
   if (fact.periodStart && fact.periodStart > fact.periodEnd) {
     context.addIssue({ code: 'custom', message: 'Periodo contable invertido.' })
   }
+  if (!fact.filedAt && !fact.filedDate || fact.filedAt && fact.filedDate &&
+      fact.filedAt.slice(0, 10) !== fact.filedDate ||
+      (fact.filedDate ?? fact.filedAt?.slice(0, 10) ?? '') < fact.periodEnd) {
+    context.addIssue({ code: 'custom', message: 'Fecha de presentación ausente o incompatible.' })
+  }
 })
 
 export const metricSchema = z.object({
@@ -103,7 +123,9 @@ export const metricSchema = z.object({
   unit: z.string().min(1).max(32),
   formulaVersion: z.string().min(1).max(40),
   inputs: z.array(z.object({ name: z.string().min(1).max(80), value: decimal,
-    provenance: z.array(provenanceSchema).min(1).max(10) })).max(20),
+    unit: z.string().min(1).max(32), companyId: stableId, listingId: stableId.nullable(),
+    periodStart: civilDate.nullable(), periodEnd: civilDate.nullable(),
+    provenance: z.array(provenanceSchema).min(1).max(32) })).max(20),
   periodStart: civilDate.nullable(),
   periodEnd: civilDate.nullable(),
   status: z.enum(['available', 'unavailable', 'not_applicable', 'stale', 'error']),
