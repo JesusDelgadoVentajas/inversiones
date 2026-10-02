@@ -1078,7 +1078,7 @@ F03 puede preparar estructura mientras F02 espera acceso externo. No se cierra l
 
 **Cierre:** herramientas listas; titular identificado; ningún servicio facturable necesario; claves fuera de Git. Si falta una cuenta, indicar exactamente cuál y continuar solo trabajo que no la requiera.
 
-**Estado 2026-10-02:** entorno, remoto, visibilidad y registros completos; Wrangler ya está autenticado por OAuth. Plan Free efectivo, Access, autenticación fuerte, cuentas de datos y claves pendientes. [Evidencia inicial](docs/evidencias/F01_F03.md) y [estado](docs/ESTADO.md).
+**Estado 2026-10-02:** entorno, remoto, visibilidad y registros completos; Wrangler ya está autenticado por OAuth y el propietario confirmó Workers Free en el panel. Facturación, Access, autenticación fuerte, cuentas de datos y claves pendientes. [Evidencia inicial](docs/evidencias/F01_F03.md) y [estado](docs/ESTADO.md).
 
 <a id="f02"></a>
 
