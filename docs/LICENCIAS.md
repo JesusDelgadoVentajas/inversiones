@@ -15,6 +15,8 @@ Se inspeccionaron las licencias declaradas en los `package.json` instalados tras
 | Tipos de Cloudflare Workers | MIT OR Apache-2.0 | Tipos en desarrollo. |
 | TypeScript | Apache-2.0 | Tipos y compilación. |
 | Oxlint, tipos de Node, React y React DOM | MIT | Análisis y tipos. |
+| Zod | MIT | Esquemas y validación en ejecución. |
+| jose | MIT | Verificación de JWT y claves públicas JWKS. |
 
 La lista corresponde a dependencias directas observadas. No es un informe exhaustivo de todos los paquetes transitivos. Las versiones y condiciones deben revisarse de nuevo si cambia el archivo de bloqueo.
 

@@ -20,7 +20,7 @@ No fijar límites arbitrarios de líneas o un archivo por función. Dividir cuan
 
 ## 2. Límites de módulos
 
-La [estructura del plan](../../PLAN_CONSTRUCCION.md#s13) se materializará durante F03. Hasta entonces estas rutas son propuestas, no módulos existentes.
+La [estructura del plan](../../PLAN_CONSTRUCCION.md#s13) se materializa por fases. Consulta el repositorio antes de asumir que una ruta propuesta existe; F03 creó el armazón y F04–F06 añadieron contratos y servicios locales.
 
 | Zona prevista | Responsabilidad | Límite relevante |
 |---|---|---|

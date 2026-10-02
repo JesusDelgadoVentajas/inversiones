@@ -33,7 +33,7 @@ Este registro conserva decisiones y motivos. El avance operativo se mantiene en 
 - **Estado:** ADOPTADA PARA LA CONSTRUCCIÓN; OPERACIÓN PENDIENTE DE VALIDACIÓN.
 - **Decisión:** seguir la arquitectura principal del [plan, sección 3](../PLAN_CONSTRUCCION.md#s03): React y TypeScript; web y API en un Worker; D1 y acceso personal mediante Access; código previsto en GitHub.
 - **Motivo:** un único origen simplifica sesión, acceso móvil y API. La app consulta bajo demanda y no necesita una IA de pago para funcionar.
-- **Consecuencia:** no generar ahora el código de la app ni dar por configuradas cuentas. Versiones, planes y comportamiento en Cloudflare se comprobarán en sus fases. La variante GitHub Pages permanece como alternativa documentada.
+- **Consecuencia:** en F00 se pospuso el código hasta preparar el trabajo; F03 generó después el armazón y F04–F06 añadieron pruebas locales. Cuentas, planes y comportamiento remoto de Cloudflare siguen pendientes. La variante GitHub Pages permanece como alternativa documentada.
 
 ## D005 — Skills concretas y ejecución principal única
 
@@ -50,6 +50,14 @@ Este registro conserva decisiones y motivos. El avance operativo se mantiene en 
 - **Decisión:** conservar el plan como fuente de requisitos y checklist; `ESTADO.md` resume la situación; `tarea-actual.md` concreta la siguiente unidad de trabajo; las evidencias respaldan los cierres.
 - **Motivo:** facilitar continuidad sin duplicar el historial del chat ni multiplicar estados contradictorios.
 - **Consecuencia:** crear una ficha propia cuando una tarea tenga suficiente alcance; las correcciones pequeñas pueden documentarse en el estado. Los controles automáticos de código se implementarán en F03, no mediante scripts ficticios ahora.
+
+## D007 — Base local y API cerrada hasta validar acceso y datos
+
+- **Fecha:** 2026-10-02.
+- **Estado:** ADOPTADA PARA EL DESARROLLO LOCAL; DESPLIEGUE PENDIENTE.
+- **Decisión:** mantener un binding D1 `local-only` para migraciones y pruebas, y bindings remotos vacíos hasta disponer de IDs reales. Las rutas de datos `/api/v1/*` verifican el JWT de Access y rechazan toda configuración incompleta. Los adaptadores usan presupuesto D1, concurrencia y transporte validados con fuentes sintéticas; no se registra ningún proveedor real hasta superar F02.
+- **Motivo:** probar las piezas de F04–F06 sin publicar datos ni fingir que Cloudflare, una cuenta gratuita o una licencia ya funcionan.
+- **Consecuencia:** las compilaciones de staging/producción siguen inertes; G-DATOS y G-ACCESO permanecen abiertas. La cuenta real fijará audiencias, bases y límites contractuales antes de activar consultas.
 
 ## Añadir una decisión
 

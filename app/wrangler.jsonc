@@ -11,13 +11,21 @@
     "APP_READY": "false",
     "ALLOW_LIVE_PROVIDERS": "false"
   },
+  "d1_databases": [{
+    "binding": "DB",
+    "database_name": "inversiones-local",
+    "database_id": "local-only",
+    "migrations_dir": "migrations"
+  }],
   "env": {
     "staging": {
       "name": "inversiones-staging",
+      "d1_databases": [],
       "vars": { "APP_READY": "false", "ALLOW_LIVE_PROVIDERS": "false" }
     },
     "production": {
       "name": "inversiones",
+      "d1_databases": [],
       "vars": { "APP_READY": "false", "ALLOW_LIVE_PROVIDERS": "false" }
     }
   }

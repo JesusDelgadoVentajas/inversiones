@@ -26,7 +26,7 @@ if (result.status !== 0) process.exit(result.status ?? 1)
 
 const built = JSON.parse(readFileSync('dist/inversiones/wrangler.json', 'utf8'))
 if (built.name !== expectedName || built.vars?.APP_READY !== 'false' ||
-    built.vars?.ALLOW_LIVE_PROVIDERS !== 'false') {
+    built.vars?.ALLOW_LIVE_PROVIDERS !== 'false' || built.d1_databases?.length) {
   console.error('La compilación seleccionó otro Worker, o habilitó datos reales.')
   process.exit(1)
 }

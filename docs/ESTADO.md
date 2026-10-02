@@ -1,32 +1,29 @@
 # Estado del proyecto
 
-**Actualizado:** 2026-10-01 (Europe/Madrid). **Última fase cerrada:** F03, armazón local reproducible. **Fases abiertas:** F01 (cuentas y protección) y F02 (datos y licencias). [Evidencia](evidencias/F01_F03.md).
+**Actualizado:** 2026-10-02 (Europe/Madrid). **Fases completas en local:** F00, F03 y F04. **Abiertas:** F01, F02, F05 y F06; F07–F20 aún no iniciadas. [Evidencia F04–F06](evidencias/F04_F06.md).
 
-## Qué funciona
+## Qué existe realmente
 
-- Repositorio GitHub [público](https://github.com/JesusDelgadoVentajas/inversiones) creado y configurado como `origin`. Sigue vacío: el commit local no se ha publicado.
-- Node 24.21.0 LTS instalado solo dentro de `.local/` y fijado en `app/.node-version`; Git, npm y bloqueo de dependencias comprobados.
-- Aplicación React/TypeScript y Worker en el mismo origen, con página inicial en español, `GET /api/health`, respuesta sintética en `GET /api/example` y 404 JSON en API.
-- Scripts de tipos, lint, pruebas, configuración, secretos y compilación staging/production. CI de GitHub Actions preparada sin claves; pendiente de ejecución remota porque no hay push.
-- Sonda limitada de proveedores y matriz de cobertura. Fed y BCE respondieron HTTP 200 en el equipo local y pasaron una comprobación básica de HTML. No se extrajeron fechas.
+- Repositorio GitHub [público](https://github.com/JesusDelgadoVentajas/inversiones) configurado como `origin`, todavía vacío: el trabajo local no se ha publicado.
+- Web React/TypeScript y Worker en un origen, con pantalla honesta de preparación, salud y ejemplo sintético. No muestra información de inversión real.
+- Contratos ejecutables para emisor, instrumento, procedencia, bloques y tipos financieros; [API activa y prevista](API.md). Cuatro migraciones y pruebas D1 locales desde vacío y desde versiones previas, con datos preservados.
+- Verificador JWT de Access con JWKS, firma RS256, emisor, audiencia, fechas y correo del propietario. Las rutas `/api/v1/*` fallan de forma cerrada sin configuración. Pruebas sintéticas en Workerd, incluida la ruta real con JWKS simulado; **ninguna sesión Access real probada**.
+- Capa de proveedor sin fuentes habilitadas: contratos opcionales, transporte HTTPS con origen aprobado y límites, cuotas D1 atómicas, tres plazas simultáneas por proveedor, caché condicionada a permiso de retención, bloqueos, reintentos y circuito. Las [pruebas](evidencias/F04_F06.md) usan respuestas sintéticas; no demuestran licencia ni cobertura.
+- CI sin claves reales y scripts de instalación/comprobación en [README](../README.md) y [app/README](../app/README.md). CI remota pendiente de push.
 
-Para iniciar la app y repetir las comprobaciones, consultar el [README](../README.md) y el [README de app](../app/README.md). F03 está cerrada como **armazón local**, sin equivaler a una aplicación de inversión operativa ni a un despliegue.
+## Puertas y dependencias pendientes
 
-## Qué falta para avanzar
-
-| Trabajo | Situación | Dependencia |
+| Fase | Falta material | Consecuencia |
 |---|---|---|
-| F01.04–F01.05: Cloudflare Workers Free y Access | No hay sesión de Cloudflare disponible ni cuenta comprobada. | Propietario: iniciar sesión y configurar acceso personal; después se puede probar el Worker remoto. |
-| F01.06–F01.07, F01.09: proveedores y seguridad | Claves de datos ausentes; exclusiones Git y ejemplos preparados. No se ha verificado autenticación fuerte. | Propietario: abrir cuentas gratuitas necesarias, guardar secretos localmente y comprobar recuperación. Nunca enviar claves por chat ni a Git. |
-| F02.02–F02.12: viabilidad de datos | G-DATOS pendiente. Solo se comprobó acceso local a dos páginas de calendario. | Worker protegido y/o claves, pruebas reales de cobertura, cuotas y licencias. |
-| F04–F20 | Pendientes. | Seguir el [plan](../PLAN_CONSTRUCCION.md) al resolverse G-DATOS. |
+| F01 | Cuenta Cloudflare, Workers Free/Access, autenticación fuerte, cuentas y claves de datos. | No hay infraestructura personal comprobada. |
+| F02 / G-DATOS | Precios, búsqueda, históricos, cuentas, noticias y mercados internacionales con fuentes, cuotas y derechos probados desde Worker protegido. | Ningún proveedor real está aprobado ni activo; la app completa a 0 € sigue sin demostrarse. [Cobertura](COBERTURA.md). |
+| F05 / G-ACCESO | D1 remotas reales y separadas, protección de todos los hostnames/previews, secretos, despliegue inerte, móvil y CPU reales. | No hay publicación ni acceso personal verificado. [Preparación](DESPLIEGUE.md). |
+| F06 | Alternativa real aprobada y comprobación de cuotas contractuales entre entornos reales; integrar primer adaptador cuando pase F02. | Capa común y partición de cuota probadas solo con datos sintéticos. |
 
-La [matriz de cobertura](COBERTURA.md), [proveedores](PROVEEDORES.md), [licencias](LICENCIAS.md) y [costes](COSTES.md) registran lo documentado y lo no demostrado. No hay precios, noticias, cuentas, competidores ni fechas financieras reales en la interfaz. No hay D1 ni despliegue.
+Las dos páginas oficiales Fed/BCE respondieron HTTP 200 en pruebas locales de F02, pero no se extrajeron fechas. No hay D1 remota ni consultas reales a Finnhub, Alpaca o SEC. Los costes y licencias siguen sujetos a comprobación de la cuenta y de cada proveedor: [COSTES](COSTES.md), [LICENCIAS](LICENCIAS.md).
 
-## Próxima tarea concreta
+## Próximo paso
 
-[F01.04 — Verificar Cloudflare Free y preparar acceso personal](tareas/tarea-actual.md). Mientras no haya acceso a la cuenta, se puede ampliar la investigación documental de fuentes, pero no marcar F02 como viable. El propietario pidió avanzar F01, F02 y F03 cuanto fuera posible sin esperarle y terminar con commit local.
+[F01.04 — Verificar Cloudflare Free y preparar acceso personal](tareas/tarea-actual.md) sigue siendo la siguiente dependencia externa. Con acceso a la cuenta, continuar F01.05, probar el Worker inerte y cerrar G-ACCESO antes de habilitar fuentes. En paralelo se puede investigar documentalmente una fuente nueva siguiendo [integrar-proveedor](../.agents/skills/integrar-proveedor/SKILL.md), sin cambiar el estado de cobertura por una página promocional.
 
-## Criterio de seguimiento
-
-Marcar una tarea solo si todos sus criterios están demostrados. Conservar muestras y limitaciones en `docs/evidencias/`; no sustituir datos reales por valores inventados. F00 permanece documentada en [su evidencia](evidencias/PREPARACION_IA.md).
+No declarar F05/F06 completas hasta superar las pruebas remotas y de licencias. El propietario autorizó avanzar trabajo independiente sin esperarlo; los commits se mantienen locales hasta una instrucción de publicación.

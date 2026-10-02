@@ -1025,9 +1025,9 @@ Cada fase tiene un resultado concreto. El orden siguiente es el recomendado para
 | [F01](#f01) | Herramientas, cuentas gratuitas y repositorio. | F00. | EN CURSO; faltan cuentas, Access y seguridad. |
 | [F02](#f02) | Prueba de datos, licencias y coste. | F01. | EN CURSO; G-DATOS pendiente. |
 | [F03](#f03) | Proyecto reproducible y armazón. | F01; integrar decisiones de F02. | COMPLETA localmente; sin datos reales ni despliegue. |
-| [F04](#f04) | Contratos y modelo de datos. | F02, F03. | PENDIENTE |
-| [F05](#f05) | Infraestructura y acceso protegido. | F03, F04. | PENDIENTE |
-| [F06](#f06) | Adaptadores, caché y presupuesto. | F02, F04, F05. | PENDIENTE |
+| [F04](#f04) | Contratos y modelo de datos. | F02, F03. | COMPLETA localmente; [evidencia](docs/evidencias/F04_F06.md). |
+| [F05](#f05) | Infraestructura y acceso protegido. | F03, F04. | EN CURSO; JWT local probado, cuenta y acceso remoto pendientes. |
+| [F06](#f06) | Adaptadores, caché y presupuesto. | F02, F04, F05. | EN CURSO; capa sintética lista, proveedores no aprobados. |
 | [F07](#f07) | Búsqueda e identidad. | F06. | PENDIENTE |
 | [F08](#f08) | Precios e históricos. | F07. | PENDIENTE |
 | [F09](#f09) | Cuentas y métricas. | F07, F08. | PENDIENTE |
@@ -1122,16 +1122,18 @@ F03 puede preparar estructura mientras F02 espera acceso externo. No se cierra l
 
 ### F04. Implementar contratos y persistencia
 
-- [ ] F04.01 — Implementar modelos de emisor, listing y mapeos externos.
-- [ ] F04.02 — Implementar esquemas de bloques, procedencia y errores.
-- [ ] F04.03 — Definir unidades, escalas, monedas, fechas civiles y UTC.
-- [ ] F04.04 — Crear migraciones de las tablas mínimas e índices justificados.
-- [ ] F04.05 — Definir IDs estables y restricciones de integridad.
-- [ ] F04.06 — Documentar rutas, parámetros, paginación y códigos de respuesta.
-- [ ] F04.07 — Crear fixtures sintéticos de estados correctos, ausentes y malformados.
-- [ ] F04.08 — Probar migración desde base vacía y desde la versión previa de prueba.
+- [x] F04.01 — Implementar modelos de emisor, listing y mapeos externos.
+- [x] F04.02 — Implementar esquemas de bloques, procedencia y errores.
+- [x] F04.03 — Definir unidades, escalas, monedas, fechas civiles y UTC.
+- [x] F04.04 — Crear migraciones de las tablas mínimas e índices justificados.
+- [x] F04.05 — Definir IDs estables y restricciones de integridad.
+- [x] F04.06 — Documentar rutas, parámetros, paginación y códigos de respuesta.
+- [x] F04.07 — Crear fixtures sintéticos de estados correctos, ausentes y malformados.
+- [x] F04.08 — Probar migración desde base vacía y desde la versión previa de prueba.
 
 **Cierre:** contratos ejecutables, migraciones reproducibles y pruebas de unidades/fechas. Los adaptadores posteriores se ajustan al modelo común.
+
+**Estado 2026-10-02:** fase completa como contrato y persistencia local, sin rutas financieras ni D1 remota. [API](docs/API.md) y [evidencia](docs/evidencias/F04_F06.md).
 
 <a id="f05"></a>
 
@@ -1140,8 +1142,8 @@ F03 puede preparar estructura mientras F02 espera acceso externo. No se cierra l
 - [ ] F05.01 — Crear D1 de staging y producción; registrar bindings distintos.
 - [ ] F05.02 — Publicar armazón con `APP_READY=false` y sin datos financieros.
 - [ ] F05.03 — Proteger hostnames, restringir identidad y desactivar rutas alternativas innecesarias.
-- [ ] F05.04 — Implementar verificación JWT, rotación de claves públicas y rechazo seguro ante configuración incompleta.
-- [ ] F05.05 — Probar sesión válida, caducada, usuario ajeno, token manipulado y audiencia de otro entorno.
+- [x] F05.04 — Implementar verificación JWT, rotación de claves públicas y rechazo seguro ante configuración incompleta (prueba sintética local; Access real pendiente).
+- [x] F05.05 — Probar sesión válida, caducada, usuario ajeno, token manipulado y audiencia de otro entorno (JWT sintéticos y JWKS simulado en Workerd).
 - [ ] F05.06 — Añadir secretos por entorno mediante el mecanismo oficial.
 - [ ] F05.07 — Confirmar que archivos compilados, mapas de código y registros no incluyen claves.
 - [ ] F05.08 — Activar consultas reales solo después de superar las pruebas de acceso.
@@ -1149,22 +1151,26 @@ F03 puede preparar estructura mientras F02 espera acceso externo. No se cierra l
 
 **Cierre G-ACCESO:** la API de datos es inaccesible para terceros y el propietario entra desde el móvil. Configuración de autenticación ausente implica cierre de acceso, no apertura.
 
+**Estado 2026-10-02:** G-ACCESO pendiente. No existe cuenta Cloudflare autenticada, política Access, D1 remota ni prueba de móvil/CPU. [Preparación](docs/DESPLIEGUE.md).
+
 <a id="f06"></a>
 
 ### F06. Construir la capa común de proveedores
 
-- [ ] F06.01 — Definir interfaces `search`, `quote`, `history`, `financials`, `news`, `events` y `peers` con capacidades opcionales explícitas.
-- [ ] F06.02 — Implementar cliente HTTP con plazo máximo, límites de tamaño, validación y redacción de secretos.
-- [ ] F06.03 — Implementar cuotas atómicas, limitación de concurrencia y presupuestos de pruebas/producción.
-- [ ] F06.04 — Implementar caché con claves completas, procedencia y caducidad por bloque.
-- [ ] F06.05 — Implementar agrupación de solicitudes, bloqueos con vencimiento y recuperación tras fallo.
+- [x] F06.01 — Definir interfaces `search`, `quote`, `history`, `financials`, `news`, `events` y `peers` con capacidades opcionales explícitas.
+- [x] F06.02 — Implementar cliente HTTP con plazo máximo, límites de tamaño, validación y redacción de secretos.
+- [x] F06.03 — Implementar cuotas atómicas, limitación de concurrencia y presupuestos de pruebas/producción; cifras reales pendientes de F02.
+- [x] F06.04 — Implementar caché con claves completas, procedencia y caducidad por bloque.
+- [x] F06.05 — Implementar agrupación de solicitudes, bloqueos con vencimiento y recuperación tras fallo.
 - [ ] F06.06 — Implementar reintentos acotados, circuito temporal y alternativas aprobadas.
-- [ ] F06.07 — Crear trazas con `requestId`, latencia, proveedor, estado y contador de consultas, sin datos privados.
-- [ ] F06.08 — Implementar limpieza acotada de caché y límites internos de almacenamiento.
-- [ ] F06.09 — Probar 429, 403 de plan, timeout, JSON inválido, cuota D1 agotada y caída de una fuente.
-- [ ] F06.10 — Probar la suma de cuotas entre entornos y la participación de pruebas locales, sin duplicar el límite de una cuenta.
+- [x] F06.07 — Crear trazas con `requestId`, latencia, proveedor, estado y contador de consultas, sin datos privados.
+- [x] F06.08 — Implementar limpieza acotada de caché y límites internos de almacenamiento.
+- [x] F06.09 — Probar 429, 403 de plan, timeout, JSON inválido, cuota D1 agotada y caída de una fuente (simuladas).
+- [x] F06.10 — Probar con D1 local y un límite sintético la suma de cuotas entre producción, staging y pruebas manuales, sin duplicar el límite de una cuenta. La cuota contractual real sigue pendiente de F02.
 
 **Cierre:** ningún módulo funcional puede saltarse esta capa para hacer llamadas ilimitadas. El frontend no habla directamente con proveedores que requieran secretos.
+
+**Estado 2026-10-02:** base local probada con fuentes sintéticas, incluida la partición conjunta de una cuota simulada. F06.06 necesita alternativas **aprobadas** y falta verificar límites contractuales reales compartidos de una cuenta; sin G-DATOS no se habilita ninguna fuente. [Evidencia](docs/evidencias/F04_F06.md).
 
 <a id="f07"></a>
 
