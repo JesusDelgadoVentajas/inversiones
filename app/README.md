@@ -1,13 +1,23 @@
 # Base local de la aplicación
 
-Lee primero el [README del proyecto](../README.md), el [estado](../docs/ESTADO.md) y las [instrucciones del agente](../AGENTS.md). Esta carpeta contiene la web React y la API del Worker en el mismo origen. Todavía no hay búsqueda, cotizaciones ni proveedores habilitados.
+Lee primero el [README del proyecto](../README.md), el [estado](../docs/ESTADO.md) y las [instrucciones del agente](../AGENTS.md). Esta carpeta contiene la web React y la API del Worker en el mismo origen. Búsqueda, perfil, precio e histórico están preparados y probados con fixtures sintéticos; ningún proveedor real está habilitado y la pantalla normal sigue en preparación.
 
-La versión de Node indicada en `.node-version` es 24.21.0. Tras usar un gestor de versiones para seleccionarla, `npm ci` reproduce las dependencias. `npm run dev` inicia web y API locales; `npm run check` ejecuta tipos, lint, pruebas deterministas, migraciones D1 locales en base efímera, comprobaciones de configuración y compilaciones de staging y producción. Ambos artefactos mantienen desactivados los datos reales. Consulta `package.json` para el resto de scripts existentes.
+La versión de Node indicada en `.node-version` es 24.21.0. Tras seleccionarla con un gestor de versiones:
+
+```sh
+npm ci
+npx playwright install chromium
+npm run dev
+```
+
+`npm run dev` inicia web y API locales. La instalación de Chromium se requiere para `test:e2e` y `check`, no para abrir la web. En Linux puede hacer falta `npx playwright install --with-deps chromium`, como configura CI; [instrucciones oficiales](https://playwright.dev/docs/intro).
+
+`npm run check` ejecuta tipos estrictos, lint, pruebas de sondas, contratos e integración, cinco migraciones D1 en base efímera, configuración, navegador en escritorio/320 px, compilaciones de staging/production y detección de secretos. Ambos artefactos mantienen desactivados los datos reales. `npm run test:e2e` ejecuta solo navegador; necesita el puerto local 4173 libre y arranca/cierra su propio servidor. Sus mocks se inyectan desde las pruebas, sin modo de demostración habilitable en producción. Consulta `package.json` para los scripts existentes y [la evidencia](../docs/evidencias/F02_F08.md) para resultados y limitaciones.
 
 `wrangler.jsonc` define un D1 **local** identificado como `local-only`; staging y producción mantienen bindings remotos vacíos hasta crear bases reales. Para preparar el estado local de desarrollo, ejecutar `npx wrangler d1 migrations apply DB --local` desde `app/`. Aún no hay D1 remota, acceso personal ni despliegue configurados. Los scripts de despliegue se añadirán cuando exista protección y se hayan comprobado los destinos. Ejecutar una compilación no publica nada. Los pasos remotos están en [DESPLIEGUE](../docs/DESPLIEGUE.md).
 
 Wrangler avisa durante las compilaciones de que `DB` local no se hereda en staging/production. Esa separación es intencionada: `build.mjs` verifica que el artefacto remoto no incluya el ID `local-only`. Al crear D1 remotas, sustituir las listas vacías por bindings con IDs reales y revisar estas comprobaciones.
 
-Los contratos ejecutables están en `shared/contracts/`; el API y sus rutas activas/previstas se describen en [API](../docs/API.md). Las rutas de datos `/api/v1/*` rechazan solicitudes cuando Access no está configurado. Los módulos de proveedores usan exclusivamente respuestas sintéticas en las pruebas; no hay adaptador real habilitado.
+Los contratos ejecutables están en `shared/contracts/`; los cálculos deterministas en `shared/finance/`, la identidad en `worker/identity/` y las rutas en `worker/routes/`. La interfaz usa componentes y un hook común de bloques para cancelación, cuotas y refresco. [API](../docs/API.md) describe las rutas. `/api/v1/*` rechaza solicitudes cuando Access no está configurado; `APP_READY` y `ALLOW_LIVE_PROVIDERS` permanecen en falso. Registrar una fuente real exige antes aceptar F02/F05 y reutilizar el ejecutor de proveedores con transporte/cuotas/caché; nunca activar una fuente solo para ver la nueva interfaz.
 
 La [sonda de proveedores](../experiments/provider-spike/README.md) se ejecuta por separado y no participa en las pruebas automáticas con red real.

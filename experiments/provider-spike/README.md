@@ -15,7 +15,7 @@ La primera orden es un ensayo sin llamadas de red. Para una prueba **local y lim
 node experiments/provider-spike/cli.mjs --live --max-requests=2 --case=fed-calendar --case=ecb-calendar
 ```
 
-Las dos sondas de calendario extraen un resumen de fechas civiles futuras sin hora, zona horaria ni confirmación de cada reunión. Los resultados y límites comprobados están en la [evidencia de calendarios](../../docs/evidencias/F02_CALENDARIOS_MACRO.md). Sus pruebas sintéticas se ejecutan con `node --test experiments/provider-spike/calendar-extract.test.mjs`.
+Las sondas Fed/BCE extraen fechas civiles futuras sin hora, zona ni confirmación de cada reunión. `bls-calendar` lee el ICS oficial y conserva fecha, hora local y `US-Eastern`, sin convertir a UTC; excluye el día actual del resumen futuro. Para probarlo, `node experiments/provider-spike/cli.mjs --live --max-requests=1 --case=bls-calendar`. Los resultados y límites están en la [evidencia de calendarios](../../docs/evidencias/F02_CALENDARIOS_MACRO.md). Las pruebas sintéticas de los tres extractores se ejecutan con `node --test experiments/provider-spike/calendar-extract.test.mjs`.
 
 `openfigi-search` no necesita clave y usa una solicitud POST. Comprueba si la primera página contiene una acción ordinaria cuyo nombre incluye el texto buscado; eso todavía no confirma bolsa, clase ni instrumento correcto. [La prueba de Inditex](../../docs/evidencias/F02_IDENTIDAD_OPENFIGI.md) muestra el límite. Para ejecutarla: `node experiments/provider-spike/cli.mjs --live --max-requests=1 --case=openfigi-search --query=Apple`. OpenFIGI limita la búsqueda sin clave a cinco solicitudes por minuto; no ejecutar la sonda repetidamente.
 

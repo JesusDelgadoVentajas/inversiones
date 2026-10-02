@@ -1,5 +1,7 @@
 import { setTimeout as delay } from 'node:timers/promises';
 
+const contentTypes = { json: 'application/json', html: 'text/html', ics: 'text/calendar' };
+
 async function readLimited(response, maxBytes) {
   const reader = response.body?.getReader();
   if (!reader) return { text: '', bytes: 0 };
@@ -55,7 +57,7 @@ export async function runProbes(probes, {
       continue;
     }
     if (requests > 0) await sleep(1100);
-    const headers = { Accept: probe.format === 'json' ? 'application/json' : 'text/html' };
+    const headers = { Accept: contentTypes[probe.format] };
     for (const [header, key] of Object.entries(probe.credentials)) headers[header] = env[key];
     const init = { headers, signal: AbortSignal.timeout(timeoutMs), redirect: 'error' };
     if (probe.method === 'POST') {
@@ -74,7 +76,7 @@ export async function runProbes(probes, {
         results.push({ ...result, status: 'FALLO', reason: `HTTP_${response.status}` });
         continue;
       }
-      const expected = probe.format === 'json' ? 'application/json' : 'text/html';
+      const expected = contentTypes[probe.format];
       if (!response.headers.get('content-type')?.toLowerCase().includes(expected)) {
         await response.body?.cancel();
         results.push({ ...result, status: 'FALLO', reason: 'CONTENT_TYPE_MISMATCH' });

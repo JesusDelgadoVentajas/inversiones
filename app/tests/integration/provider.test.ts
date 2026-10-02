@@ -18,6 +18,31 @@ function setup(cap = 10) {
 }
 
 describe('orquestación local de un proveedor sintético', () => {
+  it('una petición cancelada no realiza llamadas ni gasta cuota', async () => {
+    const input = setup()
+    const controller = new AbortController()
+    controller.abort()
+    const request = vi.fn(async () => ({ ok: true as const, data: 'synthetic', bytes: 1 }))
+    expect(await executeProvider({ ...input, request, signal: controller.signal }))
+      .toMatchObject({ ok: false, code: 'ABORTED', attempts: 0 })
+    expect(request).not.toHaveBeenCalled()
+  })
+  it('la cancelación de un intento ya iniciado conserva su cuota y libera la plaza sin abrir circuito', async () => {
+    const input = setup()
+    const controller = new AbortController()
+    const request = vi.fn(async () => {
+      controller.abort()
+      return { ok: false as const, code: 'ABORTED' as const, retryAfterMs: null }
+    })
+    expect(await executeProvider({ ...input, request, signal: controller.signal }))
+      .toMatchObject({ ok: false, code: 'ABORTED', attempts: 1 })
+    expect(request).toHaveBeenCalledTimes(1)
+    expect((await db.prepare('SELECT SUM(used) AS used FROM provider_budgets WHERE provider=?')
+      .bind(input.provider).first<{ used: number }>())?.used).toBe(2)
+    expect((await db.prepare('SELECT COUNT(*) AS n FROM provider_status WHERE provider=?')
+      .bind(input.provider).first<{ n: number }>())?.n).toBe(0)
+    expect(await acquireProviderSlot(db, input.provider, 'next', 100_000, 1)).toBe(0)
+  })
   it('reparte la cuota de una cuenta entre producción, staging y pruebas manuales', async () => {
     const provider = `p${crypto.randomUUID().replaceAll('-', '').slice(0, 12)}`
     const total = 20

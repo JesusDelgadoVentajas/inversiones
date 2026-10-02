@@ -16,6 +16,7 @@ export async function executeProvider<T>(options: {
   request: (limits: { timeoutMs: number; signal: AbortSignal }) => Promise<TransportResult<T>>
   totalTimeoutMs?: number
   maxConcurrency?: number
+  signal?: AbortSignal
   pause?: () => Promise<void>
   trace?: (entry: { requestId: string; provider: string; capability: string;
     status: string; attempts: number; durationMs: number }) => void
@@ -24,8 +25,12 @@ export async function executeProvider<T>(options: {
     totalTimeoutMs = 20_000, maxConcurrency = 3,
     pause = () => new Promise((resolve) => setTimeout(resolve, 250)),
     trace = (entry) => console.info(JSON.stringify(entry)) } = options
+  if (!Number.isInteger(totalTimeoutMs) || totalTimeoutMs < 1 || totalTimeoutMs > 20_000) {
+    throw new Error('Plazo total inválido.')
+  }
   const started = performance.now()
-  const totalSignal = AbortSignal.timeout(totalTimeoutMs)
+  const deadline = AbortSignal.timeout(totalTimeoutMs)
+  const totalSignal = options.signal ? AbortSignal.any([deadline, options.signal]) : deadline
   let attempts = 0
   const finish = (status: string, result: Result<T>) => {
     try { trace({ requestId, provider, capability, status, attempts,
@@ -34,13 +39,15 @@ export async function executeProvider<T>(options: {
     return result
   }
   if (!db) return finish('STORAGE_UNAVAILABLE', { ok: false, code: 'STORAGE_UNAVAILABLE', attempts })
+  if (options.signal?.aborted) return finish('ABORTED', { ok: false, code: 'ABORTED', attempts })
   try {
     if (await isCircuitOpen(db, provider, capability, budget.nowMs)) {
       return finish('CIRCUIT_OPEN', { ok: false, code: 'CIRCUIT_OPEN', attempts })
     }
     for (let iteration = 0; iteration < 2; iteration += 1) {
-      if (performance.now() - started >= totalTimeoutMs) {
-        return finish('TIMEOUT', { ok: false, code: 'TIMEOUT', attempts })
+      if (totalSignal.aborted || performance.now() - started >= totalTimeoutMs) {
+        const code = options.signal?.aborted ? 'ABORTED' : 'TIMEOUT'
+        return finish(code, { ok: false, code, attempts })
       }
       const nowMs = budget.nowMs + Math.round(performance.now() - started)
       const ownerId = crypto.randomUUID()
@@ -54,6 +61,10 @@ export async function executeProvider<T>(options: {
         if (!reservation.allowed) {
           return finish(reservation.reason, { ok: false, code: reservation.reason, attempts })
         }
+        if (totalSignal.aborted) {
+          const code = options.signal?.aborted ? 'ABORTED' : 'TIMEOUT'
+          return finish(code, { ok: false, code, attempts })
+        }
         attempts += 1
         try { response = await request({ timeoutMs: Math.min(8000,
           Math.max(1, totalTimeoutMs - Math.round(performance.now() - started))),
@@ -61,6 +72,10 @@ export async function executeProvider<T>(options: {
         catch { response = { ok: false, code: 'NETWORK', retryAfterMs: null } }
       } finally {
         await releaseProviderSlot(db, provider, slot, ownerId)
+      }
+      if (totalSignal.aborted || !response.ok && response.code === 'ABORTED') {
+        const code = options.signal?.aborted ? 'ABORTED' : deadline.aborted ? 'TIMEOUT' : 'ABORTED'
+        return finish(code, { ok: false, code, attempts })
       }
       if (response.ok) {
         await noteSuccess(db, provider, capability)

@@ -17,6 +17,7 @@ Se inspeccionaron las licencias declaradas en los `package.json` instalados tras
 | Oxlint, tipos de Node, React y React DOM | MIT | Análisis y tipos. |
 | Zod | MIT | Esquemas y validación en ejecución. |
 | jose | MIT | Verificación de JWT y claves públicas JWKS. |
+| Playwright Test | Apache-2.0 | Pruebas de navegador, solo desarrollo/CI. |
 
 La lista corresponde a dependencias directas observadas. No es un informe exhaustivo de todos los paquetes transitivos. Las versiones y condiciones deben revisarse de nuevo si cambia el archivo de bloqueo.
 
@@ -35,5 +36,7 @@ La lista corresponde a dependencias directas observadas. No es un informe exhaus
 | [Alpaca](https://docs.alpaca.markets/us/docs/about-market-data-api) | El plan Basic y su feed IEX no equivalen a datos consolidados. | Revisar términos de mercado y derechos concretos de uso, caché y visualización personal. |
 | [SEC](https://www.sec.gov/about/developer-resources) | Acceso público automatizado sujeto a sus reglas de identificación y uso justo. | Usuario de contacto y política de conservación/aplicación de cada documento. |
 | [Fed](https://www.federalreserve.gov/disclaimer.htm) y [BCE](https://www.ecb.europa.eu/services/using-our-site/disclaimer/html/index.en.html) | La Fed declara dominio público para su información salvo indicación contraria y pide cita. El BCE permite uso libre de información obtenida directamente, sujeto a exactitud y atribución. [Fechas extraídas localmente](evidencias/F02_CALENDARIOS_MACRO.md). | Verificar consulta automatizada, política de caché y atribución visible antes de activar calendarios; no inferir horas ni confirmación. |
+| [Alpha Vantage, Twelve Data y Marketstack](evidencias/F02_FUENTES_ADICIONALES.md) | Revisión documental: no se ha acreditado display/retención para las cuentas reales. Twelve Basic anuncia non-display y no se acepta para este panel visual. | Permiso aplicable de display exclusivamente personal, conservación y condiciones de cuenta antes de cualquier prueba de integración. |
+| [BLS](https://www.bls.gov/bls/linksite.htm) | Información de dominio público salvo contenido de terceros protegido; se probó su feed oficial de suscripción. | Atribución visible, caché, refresco y Worker; no aplicar esta regla a ilustraciones/material ajeno. |
 
 No versionar respuestas crudas, capturas ni resultados financieros reales de fuentes con permiso no demostrado. Usar fixtures sintéticos inequívocos en CI. Un acceso HTTP 200 no demuestra licencia.

@@ -4,5 +4,5 @@
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.worker.tsbuildinfo",
     "types": ["@cloudflare/workers-types", "@cloudflare/vitest-plugin/types", "vite/client"],
   },
-  "include": ["worker", "shared", "tests/integration"]
+  "include": ["worker", "shared", "tests/integration", "tests/contracts", "tests/fixtures"]
 }

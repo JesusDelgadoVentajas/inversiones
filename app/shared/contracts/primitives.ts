@@ -18,7 +18,7 @@ export const httpsUrl = z.url().refine((value) => {
 export const monetaryUnit = z.object({
   currency,
   unit: z.string().min(1).max(16),
-  unitToMajor: nonNegativeDecimal.refine((value) => value !== '0'),
+  unitToMajor: nonNegativeDecimal.refine((value) => !/^0(?:\.0+)?$/.test(value)),
 })
 
 export type StableId = z.infer<typeof stableId>

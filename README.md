@@ -2,7 +2,7 @@
 
 Proyecto de aplicación personal para buscar empresas cotizadas por su nombre y consultar precios, cuentas, métricas, noticias, competidores y eventos con fuentes y fechas visibles.
 
-**Estado:** armazón, contratos y D1 local probados; JWT y capa común de proveedores probados con datos sintéticos. No hay datos financieros reales, Cloudflare Access activo ni despliegue. El presupuesto objetivo de servicios es 0 € y aún no se ha demostrado para el producto completo.
+**Estado:** búsqueda por nombre, selección de instrumento, ficha de precio e histórico preparados y probados localmente con datos sintéticos; contratos, D1, JWT y capa común de proveedores comprobados. No hay datos financieros reales, Cloudflare Access activo ni despliegue. El presupuesto objetivo de servicios es 0 € y aún no se ha demostrado para el producto completo.
 
 ## Dónde empezar
 
@@ -57,10 +57,11 @@ Con Node 24.21.0 (ver `app/.node-version`):
 ```sh
 cd app
 npm ci
+npx playwright install chromium
 npm run dev
 ```
 
-Abrir la URL local que imprima Vite, también desde un móvil en la misma red si se configura el servidor para escuchar en esa red. Para ejecutar todas las verificaciones locales: `npm run check`. Los comandos y su alcance están en [app/README.md](app/README.md). La página muestra solo el estado del armazón; `GET /api/health` y `GET /api/example` no entregan precios reales.
+Abrir la URL local que imprima Vite, también desde un móvil en la misma red si se configura el servidor para escuchar en esa red. Chromium se instala para las pruebas, no se necesita para arrancar la web. Para todas las verificaciones locales: `npm run check`. Los comandos y su alcance están en [app/README.md](app/README.md). La pantalla normal sigue en preparación con búsqueda desactivada; las vistas se ejercitan con datos sintéticos en Playwright. `GET /api/health` y `GET /api/example` no entregan precios reales.
 
 El repositorio [GitHub público](https://github.com/JesusDelgadoVentajas/inversiones) está creado, pero aún vacío por falta de push. Solo se ha probado D1 local; Cloudflare Access, D1 y Workers remotos no están configurados ni probados. Consultar [estado](docs/ESTADO.md) antes de proseguir.
 
@@ -68,6 +69,6 @@ El repositorio [GitHub público](https://github.com/JesusDelgadoVentajas/inversi
 
 El plan define requisitos y aceptación; `ESTADO.md` registra el avance actual; `DECISIONES.md` conserva decisiones y motivos; la tarea actual concreta el trabajo siguiente. Cada dato tiene una ubicación principal: enlaza su origen en vez de copiarlo y crear versiones contradictorias.
 
-Las [comprobaciones de la preparación](docs/evidencias/PREPARACION_IA.md), [las de F01–F03](docs/evidencias/F01_F03.md) y [las de F04–F06](docs/evidencias/F04_F06.md) documentan el alcance de las revisiones.
+Las [comprobaciones de la preparación](docs/evidencias/PREPARACION_IA.md), [las de F01–F03](docs/evidencias/F01_F03.md), [las de F04–F06](docs/evidencias/F04_F06.md) y [el avance hasta F08](docs/evidencias/F02_F08.md) documentan el alcance de las revisiones.
 
 Referencias de la configuración del agente: [AGENTS.md en Codex](https://learn.chatgpt.com/docs/agent-configuration/agents-md) y [skills del repositorio](https://learn.chatgpt.com/docs/build-skills). Los nombres de comandos y rutas de descubrimiento deben contrastarse con el cliente instalado si cambia su comportamiento.

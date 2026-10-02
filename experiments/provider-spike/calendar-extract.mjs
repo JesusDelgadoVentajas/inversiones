@@ -58,3 +58,23 @@ export function calendarSummary(meetings, today = new Date().toISOString().slice
     .sort((a, b) => (a.startDate ?? a.date).localeCompare(b.startDate ?? b.date));
   return { total: meetings.length, upcoming: upcoming.length, next: upcoming.slice(0, 2) };
 }
+
+export function extractBlsReleases(ics) {
+  if (!/^BEGIN:VCALENDAR\r?\n/.test(ics) || !/\r?\nEND:VCALENDAR\r?\n?$/.test(ics)) {
+    throw new Error('BLS_CALENDAR_SHAPE_CHANGED');
+  }
+  const unfolded = ics.replace(/\r?\n[ \t]/g, '');
+  const events = [...unfolded.matchAll(/^BEGIN:VEVENT\r?\n([\s\S]*?)^END:VEVENT\r?$/gm)];
+  if (!events.length || events.length !== [...unfolded.matchAll(/^BEGIN:VEVENT\r?$/gm)].length ||
+      events.length !== [...unfolded.matchAll(/^END:VEVENT\r?$/gm)].length) throw new Error('BLS_CALENDAR_SHAPE_CHANGED');
+  return events.map(([, event]) => {
+    const date = event.match(/^DTSTART;TZID=US-Eastern:(20\d{2})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})\r?$/m);
+    const title = event.match(/^SUMMARY:([^\r\n]+)\r?$/m)?.[1];
+    if (!date || !title || Number(date[4]) > 23 || Number(date[5]) > 59 || Number(date[6]) > 59) {
+      throw new Error('BLS_CALENDAR_SHAPE_CHANGED');
+    }
+    return { date: isoDate(Number(date[1]), Number(date[2]), Number(date[3])),
+      localTime: `${date[4]}:${date[5]}:${date[6]}`, sourceTimeZone: 'US-Eastern',
+      title: title.replace(/\\([,;\\])/g, '$1').replace(/\\[nN]/g, ' ') };
+  });
+}

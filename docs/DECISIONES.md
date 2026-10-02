@@ -67,6 +67,15 @@ Este registro conserva decisiones y motivos. El avance operativo se mantiene en 
 - **Motivo:** las [URL de versión](https://developers.cloudflare.com/workers/versions-and-deployments/version-urls/) pueden introducir un acceso alternativo; el OAuth actual de Wrangler no tiene permiso de Access para configurar esa protección.
 - **Consecuencia:** las URL de versión quedan desactivadas en la configuración local. Los [previews con nombre](https://developers.cloudflare.com/workers/previews/) son un mecanismo distinto y son públicos por defecto; no se crearán sin Access. No se considera F05.03 cerrada por esta medida local.
 
+## D009 — Identidad verificada y vistas locales antes de activar datos
+
+- **Fecha:** 2026-10-02.
+- **Estado:** ADOPTADA PARA TRABAJO LOCAL AUTORIZADO; ACEPTACIÓN CON PROVEEDORES PENDIENTE.
+- **Decisión:** preparar F07/F08 mientras siguen abiertas G-DATOS/G-ACCESO, mediante pruebas sintéticas inyectadas solo desde los tests. Mantener vacío el registro real y los flags en falso. Separar cálculo exacto, persistencia, orquestación y presentación.
+- **Identidad:** guardar transaccionalmente hasta 20 candidatos normalizados y verificados por el adaptador antes de devolver los enlaces, exclusivamente si permite su retención. Seleccionar abre un UUID ya resuelto; el navegador no envía mapeos ni crea identidades. No se fusiona por nombre o símbolo. El adaptador real deberá resolver UUID estables a partir de su fuente y políticas aprobadas.
+- **Motivo:** comprobar la experiencia y los errores sin publicar datos ni confiar en una identidad aportada por el cliente. Persistir al buscar permite resolver enlaces directos sin depender de la caché financiera; se adelanta así la persistencia prevista «al seleccionar» en F07.04.
+- **Consecuencia:** las pruebas locales no cierran F07/F08. Antes de activar una fuente hay que aprobar licencia/retención, mapeo estable y búsqueda real; si su permiso no admite guardar candidatos, adaptar el flujo manteniendo la verificación en servidor. Para el gráfico básico se usan únicamente puntos recibidos en SVG y una tabla exacta, sin otra dependencia ni interpolación de cotizaciones.
+
 ## Añadir una decisión
 
 Usa el siguiente ID disponible y registra fecha, estado, decisión, motivo y consecuencias. Si cambias una decisión anterior, conserva su historia y enlaza la que la sustituye. Documenta decisiones relevantes o desviaciones; no conviertas cada elección rutinaria de implementación en un trámite.

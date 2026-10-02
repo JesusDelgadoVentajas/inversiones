@@ -1,7 +1,10 @@
 import { beforeAll, describe, expect, it, vi } from 'vitest'
+import { env } from 'cloudflare:workers'
 import { createLocalJWKSet, exportJWK, generateKeyPair, SignJWT } from 'jose'
 import { verifyAccess } from '../../worker/auth/access.js'
-import worker from '../../worker/index.js'
+import worker, { createWorker } from '../../worker/index.js'
+import { candidate } from '../fixtures/market.js'
+import { quoteBlock } from '../fixtures/contracts.js'
 
 const domain = 'https://test-team.cloudflareaccess.com'
 const audience = 'a'.repeat(64)
@@ -117,5 +120,22 @@ describe('Access local sin red ni credenciales reales', () => {
     } finally {
       vi.unstubAllGlobals()
     }
+  })
+  it('protege la ruta de búsqueda y no activa un proveedor si la bandera de datos está apagada', async () => {
+    const search = vi.fn(async () => ({ ...quoteBlock, data: [candidate()] }))
+    const handler = createWorker([{ adapter: { id: 'synthetic-provider', capabilities: new Set(['search']), search },
+      identityRetentionAllowed: true }])
+    const configured = { ...env, ...settings, APP_READY: 'true', ALLOW_LIVE_PROVIDERS: 'false' } as Env
+    vi.stubGlobal('fetch', vi.fn(async () => Response.json({ keys: [jwk] })))
+    try {
+      const path = 'https://local.test/api/v1/search?q=Empresa'
+      expect((await handler.fetch(new Request(path), configured)).status).toBe(401)
+      const response = await handler.fetch(new Request(path, {
+        headers: { 'cf-access-jwt-assertion': await token() },
+      }), configured)
+      expect(response.status).toBe(200)
+      expect(await response.json()).toMatchObject({ status: 'unavailable', data: null, reasonCode: 'NO_APPROVED_PROVIDER' })
+      expect(search).not.toHaveBeenCalled()
+    } finally { vi.unstubAllGlobals() }
   })
 })

@@ -1,4 +1,4 @@
-import type { Provenance } from '../../shared/contracts/blocks.js'
+import type { DataBlock, Provenance } from '../../shared/contracts/blocks.js'
 import type { Quote } from '../../shared/contracts/financial.js'
 
 export const companyId = '11111111-1111-4111-8111-111111111111'
@@ -17,10 +17,11 @@ export const quote = {
   listingId, price: '12.34', unit: { currency: 'GBP', unit: 'GBX', unitToMajor: '0.01' },
   observedAt: '2026-10-02T09:59:00Z', session: 'regular', feed: 'test',
   coverage: 'Fixture sintético sin mercado real',
+  previousClose: null,
 } satisfies Quote
 
 export const quoteBlock = {
   status: 'available', data: quote, provenance: [provenance],
   servedAt: '2026-10-02T10:00:01Z', fromCache: false, cacheAgeSeconds: null,
   nextAllowedRefreshAt: null, warnings: [], reasonCode: null, requestId,
-}
+} satisfies DataBlock<Quote>

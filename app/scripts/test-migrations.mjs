@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict'
-import { copyFileSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs'
+import { copyFileSync, mkdirSync, mkdtempSync, readdirSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
 import { spawnSync } from 'node:child_process'
@@ -39,12 +39,10 @@ try {
   insert(`INSERT INTO listings(id,company_id,symbol,mic,currency,instrument,status) VALUES('${listingId}','${companyId}','EINV','XLON','GBP','ordinary','active')`)
   insert("INSERT INTO cache_entries(cache_key,body_json,provenance_json,methodology_version,checked_at,expires_at,created_at) VALUES('test','{\"value\":\"0\"}','[]','v1',100,200,100)")
 
-  copyFileSync('migrations/0002_cache_access.sql', join(migrationDir, '0002_cache_access.sql'))
-  run(['d1', 'migrations', 'apply', ...common])
-  copyFileSync('migrations/0003_provider_slots.sql', join(migrationDir, '0003_provider_slots.sql'))
-  run(['d1', 'migrations', 'apply', ...common])
-  copyFileSync('migrations/0004_cache_origin.sql', join(migrationDir, '0004_cache_origin.sql'))
-  run(['d1', 'migrations', 'apply', ...common])
+  for (const migration of readdirSync('migrations').filter((name) => /^\d{4}_.*\.sql$/.test(name) && !name.startsWith('0001_')).sort()) {
+    copyFileSync(join('migrations', migration), join(migrationDir, migration))
+    run(['d1', 'migrations', 'apply', ...common])
+  }
   const rows = JSON.parse(run(['d1', 'execute', ...common, '--command',
     'SELECT c.legal_name AS name, l.symbol, e.last_accessed_at AS accessed, e.provider FROM companies c JOIN listings l ON l.company_id=c.id JOIN cache_entries e ON e.cache_key=\'test\'', '--json']))
   assert.deepEqual(rows[0].results, [{ name: 'Empresa sintética', symbol: 'EINV', accessed: 0,
@@ -58,6 +56,10 @@ try {
     `INSERT INTO provider_mappings(id,provider,company_id,listing_id,external_id) VALUES('${crypto.randomUUID()}','synthetic','${companyId}','${listingId}','BOTH')`], false)
   run(['d1', 'execute', ...common, '--command',
     `INSERT INTO companies(id,legal_name,aliases_json,created_at) VALUES('${crypto.randomUUID()}','Malformada','{bad','2026-10-02T00:00:00Z')`], false)
+  run(['d1', 'execute', ...common, '--command', `UPDATE listings SET currency='USD' WHERE id='${listingId}'`], false)
+  const mappingId = crypto.randomUUID()
+  insert(`INSERT INTO provider_mappings(id,provider,listing_id,external_id) VALUES('${mappingId}','synthetic','${listingId}','listing-1')`)
+  run(['d1', 'execute', ...common, '--command', `UPDATE provider_mappings SET external_id='listing-2' WHERE id='${mappingId}'`], false)
   console.log('D1 local: migración desde vacío y desde 0001, datos preservados y restricciones comprobadas.')
 } finally {
   rmSync(temporary, { recursive: true, force: true })

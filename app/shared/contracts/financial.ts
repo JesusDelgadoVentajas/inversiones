@@ -1,14 +1,11 @@
 import { z } from 'zod'
 import { provenanceSchema } from './blocks.js'
 import { civilDate, decimal, httpsUrl, monetaryUnit, nonNegativeDecimal, stableId, utcInstant } from './primitives.js'
+import { scaledDecimal } from '../finance/decimal.js'
 
 function compareUnsignedDecimal(left: string, right: string): number {
-  const scaled = (value: string) => {
-    const [integer, fraction = ''] = value.split('.')
-    return BigInt(integer + fraction.padEnd(12, '0'))
-  }
-  const a = scaled(left)
-  const b = scaled(right)
+  const a = scaledDecimal(left)
+  const b = scaledDecimal(right)
   return a < b ? -1 : a > b ? 1 : 0
 }
 
@@ -20,7 +17,16 @@ export const quoteSchema = z.object({
   session: z.enum(['regular', 'pre_market', 'after_hours', 'closed', 'unknown']),
   feed: z.string().min(1).max(80),
   coverage: z.string().min(1).max(160),
+  previousClose: z.object({
+    listingId: stableId, price: nonNegativeDecimal,
+    unit: monetaryUnit, observedAt: utcInstant, feed: z.string().min(1).max(80),
+    adjustment: z.enum(['raw', 'split_adjusted']),
+    shareBasis: z.enum(['current_shares', 'unknown']), provenance: provenanceSchema,
+  }).nullable().default(null),
 })
+
+export const priceRangeSchema = z.enum(['1m', '3m', '1y', '5y', 'max'])
+export type PriceRange = z.infer<typeof priceRangeSchema>
 
 export const priceBarSchema = z.object({
   listingId: stableId,
@@ -36,7 +42,7 @@ export const priceBarSchema = z.object({
   adjustment: z.enum(['raw', 'split_adjusted', 'total_return']),
   provenance: provenanceSchema,
 }).superRefine((bar, context) => {
-  if (bar.startsAt >= bar.endsAt) {
+  if (Date.parse(bar.startsAt) >= Date.parse(bar.endsAt)) {
     context.addIssue({ code: 'custom', message: 'Intervalo de precio invertido.' })
   }
   if (bar.high && bar.low && compareUnsignedDecimal(bar.high, bar.low) < 0) {
@@ -45,6 +51,27 @@ export const priceBarSchema = z.object({
   if (bar.high && compareUnsignedDecimal(bar.close, bar.high) > 0 ||
       bar.low && compareUnsignedDecimal(bar.close, bar.low) < 0) {
     context.addIssue({ code: 'custom', message: 'Cierre fuera del rango.' })
+  }
+  if (bar.open && (bar.high && compareUnsignedDecimal(bar.open, bar.high) > 0 ||
+      bar.low && compareUnsignedDecimal(bar.open, bar.low) < 0)) {
+    context.addIssue({ code: 'custom', message: 'Apertura fuera del rango.' })
+  }
+})
+
+export const historySchema = z.object({
+  listingId: stableId, range: priceRangeSchema,
+  availableRanges: priceRangeSchema.array().min(1).max(5),
+  adjustment: z.enum(['raw', 'split_adjusted', 'total_return']),
+  resolution: z.enum(['minute', 'hour', 'day', 'week', 'month']),
+  unit: monetaryUnit, feed: z.string().min(1).max(80),
+  bars: priceBarSchema.array().min(1).max(2000),
+}).superRefine((history, context) => {
+  if (!history.availableRanges.includes(history.range) || history.bars.some((bar, index) =>
+    bar.listingId !== history.listingId || bar.adjustment !== history.adjustment ||
+    bar.resolution !== history.resolution || bar.unit.currency !== history.unit.currency ||
+    bar.unit.unit !== history.unit.unit || scaledDecimal(bar.unit.unitToMajor) !== scaledDecimal(history.unit.unitToMajor) ||
+    bar.provenance.feed !== history.feed || index > 0 && Date.parse(history.bars[index - 1].endsAt) > Date.parse(bar.startsAt))) {
+    context.addIssue({ code: 'custom', message: 'Histórico mezclado, duplicado o desordenado.' })
   }
 })
 
@@ -92,6 +119,7 @@ export const metricSchema = z.object({
 })
 
 export type Quote = z.infer<typeof quoteSchema>
+export type PriceHistory = z.infer<typeof historySchema>
 export type PriceBar = z.infer<typeof priceBarSchema>
 export type FinancialFact = z.infer<typeof financialFactSchema>
 export type Metric = z.infer<typeof metricSchema>

@@ -1029,8 +1029,8 @@ Cada fase tiene un resultado concreto. El orden siguiente es el recomendado para
 | [F04](#f04) | Contratos y modelo de datos. | F02, F03. | COMPLETA localmente; [evidencia](docs/evidencias/F04_F06.md). |
 | [F05](#f05) | Infraestructura y acceso protegido. | F03, F04. | EN CURSO; JWT local probado, cuenta y acceso remoto pendientes. |
 | [F06](#f06) | Adaptadores, caché y presupuesto. | F02, F04, F05. | EN CURSO; capa sintética lista, proveedores no aprobados. |
-| [F07](#f07) | Búsqueda e identidad. | F06. | PENDIENTE |
-| [F08](#f08) | Precios e históricos. | F07. | PENDIENTE |
+| [F07](#f07) | Búsqueda e identidad. | F06. | EN CURSO; flujo local sintético, búsqueda real pendiente. |
+| [F08](#f08) | Precios e históricos. | F07. | EN CURSO; vistas/cálculo locales, datos reales pendientes. |
 | [F09](#f09) | Cuentas y métricas. | F07, F08. | PENDIENTE |
 | [F10](#f10) | Noticias. | F07. | PENDIENTE |
 | [F11](#f11) | Eventos y calendario macro. | F07. | PENDIENTE |
@@ -1117,7 +1117,7 @@ F03 puede preparar estructura mientras F02 espera acceso externo. No se cierra l
 
 **Cierre:** otra persona puede clonar, instalar y abrir el armazón local; no hay datos reales expuestos ni dependencia del estado de un ordenador.
 
-**Estado 2026-10-01:** armazón y comprobaciones locales listas; CI remota pendiente de push. [Evidencia](docs/evidencias/F01_F03.md).
+**Estado 2026-10-02:** armazón local reproducible, tipos estrictos y pruebas de navegador añadidas; CI remota pendiente de push. [Evidencia inicial](docs/evidencias/F01_F03.md) y [avance hasta F08](docs/evidencias/F02_F08.md).
 
 <a id="f04"></a>
 
@@ -1134,7 +1134,7 @@ F03 puede preparar estructura mientras F02 espera acceso externo. No se cierra l
 
 **Cierre:** contratos ejecutables, migraciones reproducibles y pruebas de unidades/fechas. Los adaptadores posteriores se ajustan al modelo común.
 
-**Estado 2026-10-02:** fase completa como contrato y persistencia local, sin rutas financieras ni D1 remota. [API](docs/API.md) y [evidencia](docs/evidencias/F04_F06.md).
+**Estado 2026-10-02:** fase completa como contrato y persistencia local; cinco migraciones y rutas financieras preparadas con fuentes sintéticas, sin D1 remota. [API](docs/API.md), [evidencia inicial](docs/evidencias/F04_F06.md) y [ampliación](docs/evidencias/F02_F08.md).
 
 <a id="f05"></a>
 
@@ -1171,7 +1171,7 @@ F03 puede preparar estructura mientras F02 espera acceso externo. No se cierra l
 
 **Cierre:** ningún módulo funcional puede saltarse esta capa para hacer llamadas ilimitadas. El frontend no habla directamente con proveedores que requieran secretos.
 
-**Estado 2026-10-02:** base local probada con fuentes sintéticas, incluida la partición conjunta de una cuota simulada. F06.06 necesita alternativas **aprobadas** y falta verificar límites contractuales reales compartidos de una cuenta; sin G-DATOS no se habilita ninguna fuente. [Evidencia](docs/evidencias/F04_F06.md).
+**Estado 2026-10-02:** base local probada con fuentes sintéticas, incluida la partición conjunta de una cuota simulada. Se añade cancelación y selección de como máximo una alternativa dentro de un plazo compartido. F06.06 necesita alternativas **aprobadas** y falta verificar límites contractuales reales compartidos de una cuenta; sin G-DATOS no se habilita ninguna fuente. [Evidencia inicial](docs/evidencias/F04_F06.md) y [ampliación](docs/evidencias/F02_F08.md).
 
 <a id="f07"></a>
 
@@ -1179,13 +1179,15 @@ F03 puede preparar estructura mientras F02 espera acceso externo. No se cierra l
 
 - [ ] F07.01 — Implementar búsqueda remota por nombre, retardo al escribir y cancelación de peticiones antiguas.
 - [ ] F07.02 — Normalizar candidatos conservando empresa, mercado, clase y divisa.
-- [ ] F07.03 — Implementar selector accesible y explicación de varias coincidencias.
+- [x] F07.03 — Implementar selector accesible y explicación de varias coincidencias (teclado y 320 px probados con datos sintéticos).
 - [ ] F07.04 — Crear o actualizar identidad y mapeos verificados al seleccionar.
-- [ ] F07.05 — Resolver enlaces directos a una ficha aunque todavía no exista caché de datos.
+- [x] F07.05 — Resolver enlaces directos a una ficha aunque todavía no exista caché de datos (identidad verificada en D1 local; sin caché financiera).
 - [ ] F07.06 — Tratar empresa privada, marca, instrumento excluido y ausencia de resultados.
 - [ ] F07.07 — Probar nombres nuevos fuera de todos los fixtures y favoritas.
 
 **Cierre:** búsqueda abierta demostrada; no hay un array de empresas permitidas que controle la disponibilidad del producto.
+
+**Estado 2026-10-02:** fase en curso. Retardo/cancelación, contratos, persistencia y ausencia/instrumentos excluidos preparados en local; no hay fuente de búsqueda aprobada ni muestreo real de marcas/privadas/nombres nuevos. Los UUID estables del adaptador real siguen pendientes. F07.04 persiste candidatos verificados antes de seleccionar, con permiso de retención, según [D009](docs/DECISIONES.md#d009--identidad-verificada-y-vistas-locales-antes-de-activar-datos); su verificación real queda abierta. [Evidencia](docs/evidencias/F02_F08.md).
 
 <a id="f08"></a>
 
@@ -1193,15 +1195,17 @@ F03 puede preparar estructura mientras F02 espera acceso externo. No se cierra l
 
 - [ ] F08.01 — Integrar proveedor aprobado de precio con moneda, unidad, feed y marca temporal.
 - [ ] F08.02 — Obtener sesión y calendario bursátil fiables; si no se conocen, indicar estado desconocido.
-- [ ] F08.03 — Calcular variación usando un cierre anterior compatible.
+- [x] F08.03 — Calcular variación usando un cierre anterior compatible (M01 exacta local; validación de inputs reales pendiente).
 - [ ] F08.04 — Implementar históricos reales y rangos disponibles, incluyendo ajuste por splits.
-- [ ] F08.05 — Separar precio sin ajustar, ajustado por splits y rentabilidad total si esta última se soporta algún día.
-- [ ] F08.06 — Implementar refresco visible, suspensión al ocultar pestaña y reanudación controlada.
-- [ ] F08.07 — Crear gráfico básico y alternativa tabular, sin interpolar datos inexistentes como cotizaciones.
+- [x] F08.05 — Separar precio sin ajustar, ajustado por splits y rentabilidad total si esta última se soporta algún día (contrato y etiquetas; sin fuente real ni cálculo de ajustes).
+- [x] F08.06 — Implementar refresco visible, suspensión al ocultar pestaña y reanudación controlada (navegador local, cuota y sesión caducada incluidos).
+- [x] F08.07 — Crear gráfico básico y alternativa tabular, sin interpolar datos inexistentes como cotizaciones (solo puntos recibidos, con fixtures sintéticos).
 - [ ] F08.08 — Probar cierre, festivo, suspensión, split y una cotización antigua servida ahora.
-- [ ] F08.09 — Verificar que un histórico no disponible no se sustituye por una curva generada.
+- [x] F08.09 — Verificar que un histórico no disponible no se sustituye por una curva generada (prueba de navegador local).
 
 **Cierre:** primera entrega vertical útil: entrar, buscar una empresa nueva, ver precio y gráfico reales, y comprobar su hora.
+
+**Estado 2026-10-02:** fase en curso. Cotización e histórico validan identidad, unidades, feed y fechas; [M01](docs/METRICAS.md) comprobada con aritmética sintética independiente. Ningún proveedor real activo. Calendario bursátil, cierre anterior auténtico y splits/históricos reales siguen pendientes; la UI muestra sesión desconocida cuando la fuente no la aporta. F08.08 tiene casos sintéticos parciales, no verificación bursátil real completa. [Evidencia](docs/evidencias/F02_F08.md).
 
 <a id="f09"></a>
 

@@ -1,5 +1,5 @@
 // Pruebas de acceso y formato; no certifican licencia ni cobertura del producto.
-import { calendarSummary, extractEcbMeetings, extractFedMeetings } from './calendar-extract.mjs';
+import { calendarSummary, extractBlsReleases, extractEcbMeetings, extractFedMeetings } from './calendar-extract.mjs';
 
 export function createProbes({ query = 'Apple', symbol = 'AAPL', cik = '0000320193' } = {}) {
   if (!/^\d{10}$/.test(cik)) throw new Error('El CIK debe tener diez dígitos.');
@@ -34,6 +34,14 @@ export function createProbes({ query = 'Apple', symbol = 'AAPL', cik = '00003201
       url: 'https://www.ecb.europa.eu/press/calendars/mgcgc/html/index.en.html',
       credentials: {}, format: 'html',
       summarize: (body) => calendarSummary(extractEcbMeetings(body)),
+      validate: (_body, summary) => summary.upcoming > 0,
+    },
+    {
+      id: 'bls-calendar', provider: 'bls', capability: 'calendar-resource',
+      url: 'https://www.bls.gov/schedule/news_release/bls.ics',
+      credentials: {}, format: 'ics',
+      summarize: (body) => calendarSummary(extractBlsReleases(body),
+        new Date(Date.now() + 86400000).toISOString().slice(0, 10)),
       validate: (_body, summary) => summary.upcoming > 0,
     },
     {

@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { calendarSummary, extractEcbMeetings, extractFedMeetings } from './calendar-extract.mjs';
+import { calendarSummary, extractBlsReleases, extractEcbMeetings, extractFedMeetings } from './calendar-extract.mjs';
 
 const fedRows = (dates) => dates.map(([month, days]) =>
   `<div class="row fomc-meeting"><div class="fomc-meeting__month"><strong>${month}</strong></div>
@@ -48,4 +48,14 @@ test('rechaza cambios de estructura y fechas inválidas', () => {
   ])}`), /FED_CALENDAR_SHAPE_CHANGED/);
   assert.throws(() => extractEcbMeetings('<p>29\/10\/2026</p>'), /ECB_CALENDAR_SHAPE_CHANGED/);
   assert.throws(() => extractEcbMeetings('<dt>31/02/2027</dt><dd>Governing Council of the ECB: monetary policy meeting (Day 2)</dd>'), /INVALID_CALENDAR_DATE/);
+});
+
+test('BLS: conserva fecha, hora local y zona del ICS sin convertirla en UTC', () => {
+  const ics = 'BEGIN:VCALENDAR\r\nBEGIN:VEVENT\r\nDTSTART;TZID=US-Eastern:20270314T083000\r\nSUMMARY:Indicador\\, de\r\n  prueba\r\nEND:VEVENT\r\nEND:VCALENDAR';
+  assert.deepEqual(extractBlsReleases(ics), [{ date: '2027-03-14', localTime: '08:30:00',
+    sourceTimeZone: 'US-Eastern', title: 'Indicador, de prueba' }]);
+  assert.throws(() => extractBlsReleases(ics.replace('US-Eastern', 'unknown')), /BLS_CALENDAR_SHAPE_CHANGED/);
+  assert.throws(() => extractBlsReleases(ics.replace('083000', '253000')), /BLS_CALENDAR_SHAPE_CHANGED/);
+  assert.throws(() => extractBlsReleases(ics.replace('END:VCALENDAR', '')), /BLS_CALENDAR_SHAPE_CHANGED/);
+  assert.throws(() => extractBlsReleases(ics.replace('END:VCALENDAR', 'BEGIN:VEVENT\r\nEND:VCALENDAR')), /BLS_CALENDAR_SHAPE_CHANGED/);
 });
