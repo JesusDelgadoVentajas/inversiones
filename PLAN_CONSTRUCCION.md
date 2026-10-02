@@ -1078,7 +1078,7 @@ F03 puede preparar estructura mientras F02 espera acceso externo. No se cierra l
 
 **Cierre:** herramientas listas; titular identificado; ningún servicio facturable necesario; claves fuera de Git. Si falta una cuenta, indicar exactamente cuál y continuar solo trabajo que no la requiera.
 
-**Estado 2026-10-01:** entorno, remoto, visibilidad y registros completos; Cloudflare, Access, cuentas y claves pendientes. [Evidencia](docs/evidencias/F01_F03.md).
+**Estado 2026-10-02:** entorno, remoto, visibilidad y registros completos; Wrangler ya está autenticado por OAuth. Plan Free efectivo, Access, autenticación fuerte, cuentas de datos y claves pendientes. [Evidencia inicial](docs/evidencias/F01_F03.md) y [estado](docs/ESTADO.md).
 
 <a id="f02"></a>
 
@@ -1151,7 +1151,7 @@ F03 puede preparar estructura mientras F02 espera acceso externo. No se cierra l
 
 **Cierre G-ACCESO:** la API de datos es inaccesible para terceros y el propietario entra desde el móvil. Configuración de autenticación ausente implica cierre de acceso, no apertura.
 
-**Estado 2026-10-02:** G-ACCESO pendiente. No existe cuenta Cloudflare autenticada, política Access, D1 remota ni prueba de móvil/CPU. [Preparación](docs/DESPLIEGUE.md).
+**Estado 2026-10-02:** G-ACCESO pendiente. Hay sesión OAuth de Wrangler, pero no existe política Access, D1 remota ni prueba de móvil/CPU. [Preparación](docs/DESPLIEGUE.md).
 
 <a id="f06"></a>
 

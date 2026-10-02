@@ -1,6 +1,6 @@
 # Preparación de F05: Cloudflare y acceso personal
 
-**Estado 2026-10-02:** procedimiento preparado; **ningún paso remoto se ha ejecutado**. No hay sesión de Cloudflare ni IDs de D1 reales. Las compilaciones de staging y producción mantienen `APP_READY=false`, `ALLOW_LIVE_PROVIDERS=false` y **sin binding remoto D1**. El binding `local-only` de `app/wrangler.jsonc` sirve exclusivamente para desarrollo y pruebas.
+**Estado 2026-10-02:** procedimiento preparado; Wrangler ya tiene sesión OAuth y se han hecho solo consultas remotas de lectura. No hay despliegue ni IDs de D1 reales. Las compilaciones de staging y producción mantienen `APP_READY=false`, `ALLOW_LIVE_PROVIDERS=false` y **sin binding remoto D1**. El binding `local-only` de `app/wrangler.jsonc` sirve exclusivamente para desarrollo y pruebas.
 
 ## Condiciones previas
 
@@ -17,4 +17,4 @@
 5. Probar desde un móvil fuera de la red local. Medir verificación JWT en frío y caliente, CPU, errores y cuotas en el plan Free real. Documentar evidencias saneadas. Si la protección o configuración falla, detener F05 y no habilitar proveedores.
 6. Solo tras G-ACCESO y G-DATOS, añadir secretos de fuentes aprobadas por entorno, límites contractuales y adaptadores; activar datos con un cambio revisado y nuevo despliegue. No basta cambiar una variable en un artefacto antiguo: compilar para el entorno correcto.
 
-**Bloqueo actual:** F05.01–F05.03, F05.06, F05.08 y F05.09 requieren cuenta/sesión y ensayos remotos. El módulo JWT, sus pruebas sintéticas y el cierre por configuración ausente están en el repositorio, pero no equivalen a una sesión válida de Cloudflare Access.
+**Bloqueo actual:** F05.01–F05.03, F05.06, F05.08 y F05.09 requieren plan Free comprobado, Zero Trust/Access configurado y ensayos remotos. El módulo JWT, sus pruebas sintéticas y el cierre por configuración ausente están en el repositorio, pero no equivalen a una sesión válida de Cloudflare Access.
