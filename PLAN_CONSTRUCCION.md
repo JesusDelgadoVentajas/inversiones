@@ -1100,7 +1100,7 @@ F03 puede preparar estructura mientras F02 espera acceso externo. No se cierra l
 
 **Cierre:** existe una ruta de datos gratuita demostrada para el alcance aceptado. F02 es la principal puerta de viabilidad. Si falla, el informe debe evitar que se inviertan semanas en una interfaz basada en servicios inaccesibles.
 
-**Estado 2026-10-02:** sonda y pruebas sintéticas listas; acceso HTML local a calendarios Fed/BCE y acceso parcial a búsqueda OpenFIGI demostrados. Ni la búsqueda general por nombre ni precios, históricos y cuentas están probados. G-DATOS permanece pendiente; ver [cobertura](docs/COBERTURA.md) y [evidencia de identidad](docs/evidencias/F02_IDENTIDAD_OPENFIGI.md).
+**Estado 2026-10-02:** sonda y pruebas sintéticas listas; acceso HTML local a calendarios Fed/BCE y acceso parcial a búsqueda OpenFIGI demostrados. Una demo pública de EODHD devolvió un año de histórico diario de Apple; no demuestra el plan gratuito general ni la licencia de visualización. La búsqueda general por nombre, precios recientes y cuentas suficientes siguen sin probarse. G-DATOS permanece pendiente; ver [cobertura](docs/COBERTURA.md), [identidad](docs/evidencias/F02_IDENTIDAD_OPENFIGI.md) y [precios/cuentas](docs/evidencias/F02_PRECIOS_Y_CUENTAS.md).
 
 <a id="f03"></a>
 
@@ -1152,7 +1152,7 @@ F03 puede preparar estructura mientras F02 espera acceso externo. No se cierra l
 
 **Cierre G-ACCESO:** la API de datos es inaccesible para terceros y el propietario entra desde el móvil. Configuración de autenticación ausente implica cierre de acceso, no apertura.
 
-**Estado 2026-10-02:** G-ACCESO pendiente. Hay sesión OAuth de Wrangler, pero no existe política Access, D1 remota ni prueba de móvil/CPU. [Preparación](docs/DESPLIEGUE.md).
+**Estado 2026-10-02:** G-ACCESO pendiente. Hay sesión OAuth de Wrangler, sin permiso de Access; no existe política Access, D1 remota ni prueba de móvil/CPU. Las URL de versión están desactivadas en el artefacto local; este proyecto no ha creado previews con nombre. [Preparación](docs/DESPLIEGUE.md).
 
 <a id="f06"></a>
 

@@ -15,6 +15,18 @@ OpenFIGI documenta una API gratuita de búsqueda y mapeo de instrumentos. Sin cl
 
 La sonda reproducible `experiments/provider-spike/cli.mjs` se amplió con `openfigi-search`, siempre bajo `--live`, `--max-requests` y sin guardar el cuerpo. A las 16:23 UTC, una llamada para `Apple` devolvió HTTP 200, 25.527 bytes y al menos una acción ordinaria cuyo nombre contenía «Apple» en la primera página; una llamada para `Inditex` devolvió HTTP 200, 24.073 bytes y ninguna acción ordinaria que coincidiese por nombre en esa página. La versión final de la sonda clasifica este último caso como `NO_MATCHING_COMMON_STOCK_ON_FIRST_PAGE`, no como cotización ni como identidad confirmada. La forma del POST y ese fallo se prueban con fixture sintético en la suite unitaria.
 
+La muestra se amplió con cinco consultas locales más a las 16:30–16:31 UTC, separadas al menos 13 segundos para respetar el límite sin clave. Todas respondieron HTTP 200; el criterio de la sonda exige una acción ordinaria cuyo nombre contenga literalmente la consulta, sin certificar la bolsa:
+
+| Nombre buscado | Coincidencia básica en primera página | Límite de la observación |
+|---|---|---|
+| Alphabet | No | Clase A/C y emisor sin resolver. |
+| Berkshire Hathaway | No | Clase A/B sin resolver. |
+| Santander | No | Emisor y bolsa española sin resolver. |
+| ASML | Sí | Puede haber varias cotizaciones; no se seleccionó mercado. |
+| Toyota | Sí | Puede haber acción local y ADR; no se seleccionó mercado. |
+
+La falta de coincidencia literal no prueba ausencia del instrumento en OpenFIGI, pero sí que este flujo de una sola página y sin alias no satisface la búsqueda abierta del producto.
+
 ## Restricciones documentales de otras fuentes
 
 - [Alpha Vantage](https://www.alphavantage.co/support/) documenta 25 solicitudes diarias en la clave gratuita estándar y exige acceso premium para cotizaciones estadounidenses en tiempo real o con 15 minutos de retraso. No resuelve por sí solo el precio reciente de uso frecuente.

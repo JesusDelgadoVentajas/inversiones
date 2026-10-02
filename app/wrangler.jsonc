@@ -3,6 +3,7 @@
   "name": "inversiones",
   "main": "worker/index.ts",
   "compatibility_date": "2026-10-01",
+  "preview_urls": false,
   "assets": {
     "not_found_handling": "single-page-application",
     "run_worker_first": ["/api/*"]
@@ -20,11 +21,13 @@
   "env": {
     "staging": {
       "name": "inversiones-staging",
+      "preview_urls": false,
       "d1_databases": [],
       "vars": { "APP_READY": "false", "ALLOW_LIVE_PROVIDERS": "false" }
     },
     "production": {
       "name": "inversiones",
+      "preview_urls": false,
       "d1_databases": [],
       "vars": { "APP_READY": "false", "ALLOW_LIVE_PROVIDERS": "false" }
     }

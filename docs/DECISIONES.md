@@ -59,6 +59,14 @@ Este registro conserva decisiones y motivos. El avance operativo se mantiene en 
 - **Motivo:** probar las piezas de F04–F06 sin publicar datos ni fingir que Cloudflare, una cuenta gratuita o una licencia ya funcionan.
 - **Consecuencia:** las compilaciones de staging/producción siguen inertes; G-DATOS y G-ACCESO permanecen abiertas. La cuenta real fijará audiencias, bases y límites contractuales antes de activar consultas.
 
+## D008 — URL de versión desactivadas hasta verificar Access
+
+- **Fecha:** 2026-10-02.
+- **Estado:** ADOPTADA PARA EL ARMAZÓN LOCAL; EFECTO REMOTO PENDIENTE DE DESPLIEGUE.
+- **Decisión:** fijar `preview_urls=false` en la configuración raíz, staging y producción, comprobar el valor compilado y no configurar aún el bloque `previews`. Antes de publicar datos, proteger el Worker completo con Access y probar cada ruta efectiva.
+- **Motivo:** las [URL de versión](https://developers.cloudflare.com/workers/versions-and-deployments/version-urls/) pueden introducir un acceso alternativo; el OAuth actual de Wrangler no tiene permiso de Access para configurar esa protección.
+- **Consecuencia:** las URL de versión quedan desactivadas en la configuración local. Los [previews con nombre](https://developers.cloudflare.com/workers/previews/) son un mecanismo distinto y son públicos por defecto; no se crearán sin Access. No se considera F05.03 cerrada por esta medida local.
+
 ## Añadir una decisión
 
 Usa el siguiente ID disponible y registra fecha, estado, decisión, motivo y consecuencias. Si cambias una decisión anterior, conserva su historia y enlaza la que la sustituye. Documenta decisiones relevantes o desviaciones; no conviertas cada elección rutinaria de implementación en un trámite.

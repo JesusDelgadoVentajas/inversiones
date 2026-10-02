@@ -11,6 +11,7 @@ if (!['staging', 'production'].includes(environment)) {
 const config = JSON.parse(readFileSync('wrangler.jsonc', 'utf8'))
 const expectedName = environment === 'staging' ? 'inversiones-staging' : 'inversiones'
 if (config.env?.[environment]?.name !== expectedName ||
+    config.env?.[environment]?.preview_urls !== false ||
     config.env?.[environment]?.vars?.APP_READY !== 'false' ||
     config.env?.[environment]?.vars?.ALLOW_LIVE_PROVIDERS !== 'false') {
   console.error('La configuración del entorno no coincide con la preparación segura.')
@@ -26,7 +27,9 @@ if (result.status !== 0) process.exit(result.status ?? 1)
 
 const built = JSON.parse(readFileSync('dist/inversiones/wrangler.json', 'utf8'))
 if (built.name !== expectedName || built.vars?.APP_READY !== 'false' ||
-    built.vars?.ALLOW_LIVE_PROVIDERS !== 'false' || built.d1_databases?.length) {
+    built.vars?.ALLOW_LIVE_PROVIDERS !== 'false' || built.preview_urls !== false ||
+    built.previews != null ||
+    built.d1_databases?.length) {
   console.error('La compilación seleccionó otro Worker, o habilitó datos reales.')
   process.exit(1)
 }

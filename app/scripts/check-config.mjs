@@ -3,11 +3,13 @@ import { readFileSync } from 'node:fs'
 const config = JSON.parse(readFileSync('wrangler.jsonc', 'utf8'))
 const apiFirst = config.assets?.run_worker_first?.includes('/api/*')
 const safe = (vars) => vars?.APP_READY === 'false' && vars?.ALLOW_LIVE_PROVIDERS === 'false'
+const previewsOff = (environment) => environment?.preview_urls === false
 const privateNames = ['ACCESS_TEAM_DOMAIN', 'ACCESS_AUD', 'ACCESS_OWNER_EMAIL',
   'FINNHUB_API_KEY', 'ALPACA_API_KEY', 'ALPACA_API_SECRET']
 const noPrivateVars = (vars) => privateNames.every((name) => !(name in (vars ?? {})))
 
-if (!apiFirst || !safe(config.vars) || !safe(config.env?.staging?.vars) ||
+if (!apiFirst || config.previews != null || !previewsOff(config) || !previewsOff(config.env?.staging) ||
+    !previewsOff(config.env?.production) || !safe(config.vars) || !safe(config.env?.staging?.vars) ||
     !safe(config.env?.production?.vars) || config.env?.staging?.name !== 'inversiones-staging' ||
     config.env?.production?.name !== 'inversiones' ||
     !noPrivateVars(config.vars) || !noPrivateVars(config.env?.staging?.vars) ||
