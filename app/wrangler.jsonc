@@ -22,13 +22,23 @@
     "staging": {
       "name": "inversiones-staging",
       "preview_urls": false,
-      "d1_databases": [],
+      "d1_databases": [{
+        "binding": "DB",
+        "database_name": "inversiones-staging",
+        "database_id": "0640bf3a-cd74-454f-896e-6f3a9dfd77db",
+        "migrations_dir": "migrations"
+      }],
       "vars": { "APP_READY": "false", "ALLOW_LIVE_PROVIDERS": "false" }
     },
     "production": {
       "name": "inversiones",
       "preview_urls": false,
-      "d1_databases": [],
+      "d1_databases": [{
+        "binding": "DB",
+        "database_name": "inversiones-production",
+        "database_id": "3e0fae84-adb2-466e-9c21-7ef4143be741",
+        "migrations_dir": "migrations"
+      }],
       "vars": { "APP_READY": "false", "ALLOW_LIVE_PROVIDERS": "false" }
     }
   }

@@ -2,6 +2,8 @@
 
 **Fecha:** 2026-10-02. Revisión de documentación oficial, sin crear cuentas, aceptar términos ni consultar APIs de precios. Todas las capacidades indicadas son **DOCUMENTADAS**, no probadas desde el equipo ni desde Worker. Ninguna fuente se incorpora al registro de proveedores activos.
 
+Esta revisión corresponde a los tres candidatos de la tabla. La [búsqueda posterior de Stocklake, TGMCharts y otras fuentes](F02_BUSQUEDA_FUENTES.md) sí incluye consultas financieras locales sin cuenta; no cambia el estado documental de los tres proveedores siguientes.
+
 | Candidato | Plan gratuito descrito por la fuente | Hueco o condición para esta app |
 |---|---|---|
 | Alpha Vantage | [Soporte](https://www.alphavantage.co/support/): hasta 25 peticiones/día; precio estadounidense en tiempo real o retrasado 15 minutos requiere premium. [API](https://www.alphavantage.co/documentation/): diario raw compacto de 100 puntos; diario completo y diario ajustado son premium. | No acredita precio intradía gratuito ni un año **diario ajustado** gratuito. Hay otras resoluciones que deben evaluarse por separado; no se descarta todo histórico. Faltan identidad por nombre, mercados, derechos de visualización/retención y prueba con clave personal. |

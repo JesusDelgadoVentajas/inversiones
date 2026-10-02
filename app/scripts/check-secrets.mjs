@@ -1,20 +1,28 @@
 import { execFileSync } from 'node:child_process'
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs'
 import { resolve } from 'node:path'
+import { parseEnv } from 'node:util'
+import { configuredValues, containsSecret, privateFile } from './secret-detection.mjs'
 
 const root = resolve('..')
 const files = execFileSync('git', ['ls-files', '--cached', '--others', '--exclude-standard', '-z'], {
   cwd: root, encoding: 'utf8',
 }).split('\0').filter(Boolean)
 
-const privatePath = /(?:^|\/)(?:\.env(?:\..*)?|\.dev\.vars(?:\..*)?|\.local(?:\/.*)?|[^/]+\.(?:pem|key))$/
-const tokenPatterns = [
-  /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/,
-  /\bgh[pousr]_[A-Za-z0-9]{20,}\b/,
-  /\bgithub_pat_[A-Za-z0-9_]{30,}\b/,
-  /\bAKIA[A-Z0-9]{16}\b/,
-  /\bsk-(?:proj-)?[A-Za-z0-9_-]{24,}\b/,
-]
+const environments = [process.env]
+for (const directory of [root, resolve('.')]) {
+  for (const name of readdirSync(directory)) {
+    if (!/^(?:\.env|\.dev\.vars)(?:\..*)?$/.test(name) || name.endsWith('.example')) continue
+    const path = resolve(directory, name)
+    if (statSync(path).isFile()) {
+      try { environments.push(parseEnv(readFileSync(path, 'utf8'))) } catch {
+        console.error('No se pudo leer una configuración privada para revisar secretos.')
+        process.exit(1)
+      }
+    }
+  }
+}
+const values = configuredValues(environments)
 const errors = []
 let scanned = 0
 function scan(file, path) {
@@ -24,14 +32,15 @@ function scan(file, path) {
   }
   const content = readFileSync(path, 'utf8')
   scanned += 1
-  if (tokenPatterns.some((pattern) => pattern.test(content))) errors.push(`Posible secreto en: ${file}`)
+  if (containsSecret(content, values)) errors.push(`Posible secreto en: ${file}`)
 }
 for (const file of files) {
-  if (privatePath.test(file) && !file.endsWith('.example')) {
+  if (privateFile(file)) {
     errors.push(`Ruta privada preparada para Git: ${file}`)
     continue
   }
   const path = resolve(root, file)
+  if (!existsSync(path)) continue // Git aún puede incluir un archivo eliminado en el diff.
   scan(file, path)
 }
 function scanBuild(directory) {
@@ -48,4 +57,4 @@ if (errors.length) {
   for (const error of errors) console.error(error)
   process.exit(1)
 }
-console.log(`${sourceScanned} archivos versionables y ${scanned - sourceScanned} archivos compilados revisados; sin coincidencias de los patrones comprobados.`)
+console.log(`${sourceScanned} archivos versionables y ${scanned - sourceScanned} archivos compilados revisados; sin coincidencias de patrones ni valores privados configurados.`)

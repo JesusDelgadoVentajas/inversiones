@@ -33,6 +33,8 @@ export async function runProbes(probes, {
   }
   const results = [];
   const stoppedProviders = new Set();
+  const completed = new Set();
+  const sessions = new Map();
   let requests = 0;
   for (const probe of probes) {
     const result = {
@@ -56,8 +58,13 @@ export async function runProbes(probes, {
       results.push({ ...result, status: 'OMITIDO', reason: 'REQUEST_BUDGET_OR_PROVIDER_STOP' });
       continue;
     }
+    if (probe.requires && !completed.has(probe.requires)) {
+      results.push({ ...result, status: 'OMITIDO', reason: 'PREREQUISITE_NOT_PROBED' });
+      continue;
+    }
     if (requests > 0) await sleep(1100);
-    const headers = { Accept: contentTypes[probe.format] };
+    const headers = { Accept: contentTypes[probe.format], ...probe.headers };
+    if (sessions.has(probe.provider)) headers['Mcp-Session-Id'] = sessions.get(probe.provider);
     for (const [header, key] of Object.entries(probe.credentials)) headers[header] = env[key];
     const init = { headers, signal: AbortSignal.timeout(timeoutMs), redirect: 'error' };
     if (probe.method === 'POST') {
@@ -86,8 +93,14 @@ export async function runProbes(probes, {
       const data = probe.format === 'json' ? JSON.parse(body.text) : body.text;
       const summary = probe.summarize?.(data);
       const valid = Boolean(probe.validate(data, summary));
+      if (valid) {
+        completed.add(probe.id);
+        const session = response.headers.get('mcp-session-id');
+        if (probe.captureMcpSession && session) sessions.set(probe.provider, session);
+      }
       results.push({ ...result, bytes: body.bytes, status: valid ? 'PROBADO' : 'FALLO',
-        reason: valid ? (summary ? 'ACCESS_AND_DATE_EXTRACTION_ONLY' : 'ACCESS_AND_BASIC_SHAPE_ONLY') :
+        reason: valid ? (probe.successReason ??
+          (summary ? 'ACCESS_AND_DATE_EXTRACTION_ONLY' : 'ACCESS_AND_BASIC_SHAPE_ONLY')) :
           probe.invalidReason ?? 'INVALID_OR_EMPTY_RESPONSE',
         ...(valid && summary ? { summary } : {}) });
     } catch (error) {

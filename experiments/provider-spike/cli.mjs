@@ -10,7 +10,12 @@ try {
     query: { type: 'string', default: 'Apple' },
     symbol: { type: 'string', default: 'AAPL' },
     cik: { type: 'string', default: '0000320193' },
+    days: { type: 'string', default: '5' },
+    years: { type: 'string', default: '2' },
+    from: { type: 'string', default: '2026-10-01' },
+    to: { type: 'string', default: '2026-10-02' },
   } });
+  if (values.live && !values.case?.length) throw new Error('El modo vivo exige casos explícitos.');
   let probes = createProbes(values);
   if (values.case) {
     if (values.case.some((id) => !probes.some((probe) => probe.id === id))) {

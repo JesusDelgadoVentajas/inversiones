@@ -76,6 +76,14 @@ Este registro conserva decisiones y motivos. El avance operativo se mantiene en 
 - **Motivo:** comprobar la experiencia y los errores sin publicar datos ni confiar en una identidad aportada por el cliente. Persistir al buscar permite resolver enlaces directos sin depender de la caché financiera; se adelanta así la persistencia prevista «al seleccionar» en F07.04.
 - **Consecuencia:** las pruebas locales no cierran F07/F08. Antes de activar una fuente hay que aprobar licencia/retención, mapeo estable y búsqueda real; si su permiso no admite guardar candidatos, adaptar el flujo manteniendo la verificación en servidor. Para el gráfico básico se usan únicamente puntos recibidos en SVG y una tabla exacta, sin otra dependencia ni interpolación de cotizaciones.
 
+## D010 — D1 privadas antes del despliegue del Worker
+
+- **Fecha:** 2026-10-03.
+- **Estado:** ADOPTADA; BASES Y ESQUEMAS COMPROBADOS EN CLOUDFLARE.
+- **Decisión:** completar F05.01 con dos bases privadas de la cuenta, separadas y migradas, mientras Access sigue pendiente. Conservar `local-only` en desarrollo y usar los UUID reales por entorno. Centralizar la validación de configuración y artefactos para rechazar IDs compartidos, destinos cruzados, datos activos o previews habilitadas.
+- **Motivo:** crear y consultar D1 mediante la sesión autorizada de Wrangler no publica un Worker ni una API accesible por el navegador; puede hacerse sin las entradas de Access que faltan. Workers Free fue confirmado por el propietario y se revisaron los límites D1 antes de crear las bases, sin cambio de plan.
+- **Consecuencia:** sustituye el estado de bindings vacíos de D007 una vez conocidos los IDs. No cambia el resto de su protección: flags en falso, registro de proveedores vacío y ninguna publicación. Las cinco migraciones y las nueve tablas vacías se verificaron en ambas bases; esto no cierra G-ACCESO ni demuestra llamadas financieras desde Cloudflare. [Evidencia](evidencias/F01_F08_CONTINUACION.md).
+
 ## Añadir una decisión
 
 Usa el siguiente ID disponible y registra fecha, estado, decisión, motivo y consecuencias. Si cambias una decisión anterior, conserva su historia y enlaza la que la sustituye. Documenta decisiones relevantes o desviaciones; no conviertas cada elección rutinaria de implementación en un trámite.

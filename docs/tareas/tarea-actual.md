@@ -1,22 +1,30 @@
-# Continuación F02–F08 — Activar la primera fuente verificada y acceso personal
+# Continuación autónoma F01–F08
 
-- **Estado:** trabajo independiente local hasta F08 entregado; aceptación externa pendiente. [Evidencia](../evidencias/F02_F08.md).
-- **Encargo vigente:** avanzar todo lo posible de F02 a F08 sin intervención del propietario, priorizando rigor. No habilitar datos ni reducir alcance para cerrar fases.
+- **Encargo vigente:** completar el trabajo posible sin intervención del propietario entre F01 y F08; verificarlo, actualizar ticks/seguimiento y guardar los cambios pertinentes en un commit. El propietario retomó el desarrollo después del informe de fuentes; la parada anterior ya no está vigente.
+- **Punto de partida:** [Stocklake/TGMCharts ensayadas](../evidencias/F02_BUSQUEDA_FUENTES.md), sin fuente principal aprobada. Armazón local F03/F04 y partes de F05–F08 comprobados con datos sintéticos. No publicar la web ni activar proveedores sin satisfacer las puertas correspondientes.
+- **Resultado entregado:** dos D1 privadas separadas y cinco migraciones verificadas en Cloudflare; contacto SEC auténtico privado y dos endpoints locales probados; sondas Stocklake/TGMCharts/Finnhub-news reproducibles; controles de configuración y secretos reforzados; 101 pruebas locales pasan. [Evidencia](../evidencias/F01_F08_CONTINUACION.md). F01.07/F05.01 se marcan completas con su ámbito real; el resto de aceptaciones externas permanece abierto.
+- **Bloqueos conservados:** Access/MFA/facturación, claves de otras fuentes, prueba de móvil/CPU y aprobación internacional de datos. El contacto SEC está resuelto en local; no acredita extracción XBRL ni acceso desde Worker. No se inventan credenciales ni se crean cuentas de datos por el titular.
+- **Siguiente unidad:** F01.05/F05.03, configurar Access gratuito para la identidad del propietario y todos los accesos, con AUD reales distintos por entorno. Requiere panel o delegación adecuada porque el OAuth actual carece de permiso Access. El trabajo autónomo restante de esta entrega está terminado; no publicar por haber creado el commit.
+
+## Pendientes del encargo anterior F02–F08
+
+- **Estado anterior:** trabajo independiente local hasta F08 entregado; aceptación externa pendiente. [Evidencia](../evidencias/F02_F08.md).
+- **Alcance conservado:** avanzar dentro de F01–F08 por el nuevo encargo, sin habilitar datos ni reducir alcance para cerrar fases.
 - **Resultado local:** API, identidad, UI, precio/histórico y M01 preparados con fixtures sintéticos; no hay proveedor real registrado ni despliegue.
 
 ## Entrada A: F01.04/F01.05 y F05 — Cloudflare personal
 
 1. Conservar Wrangler OAuth existente. Workers Free fue confirmado por el propietario el 02-10-2026; la lectura de suscripciones no está disponible con el OAuth actual. Revisar facturación y cuotas, activar autenticación fuerte y guardar recuperación fuera del repo.
 2. Configurar Zero Trust/Access gratuito para la identidad del propietario. El OAuth no tiene permiso Access; hace falta configuración del panel o una credencial adecuada. No compartir contraseñas/tokens por chat o Git.
-3. Preparar protección del hostname completo y alternativas antes de publicar datos. Crear D1 separadas y configurar bindings solo con IDs reales. Mantener `APP_READY=false` y fuentes desactivadas para el primer armazón remoto. [Procedimiento](../DESPLIEGUE.md).
+3. Preparar protección del hostname completo y alternativas antes de publicar datos. D1 separadas, bindings reales y cinco migraciones ya están completos; conservar `APP_READY=false` y fuentes desactivadas para el primer armazón remoto. [Procedimiento](../DESPLIEGUE.md).
 4. Verificar sesión válida/caducada, usuario ajeno, ruta alternativa, JWT real, móvil y CPU. El despliegue/push requiere autorización vigente; no se infiere de un commit. Cerrar G-ACCESO solo con resultados reales.
 
-F01.04 conserva pendientes: cuenta/plan y ausencia de facturación comprobados; límites reales/responsable registrados en [COSTES](../COSTES.md); marcar el plan al satisfacer aceptación. No se borra esta tarea anterior ni se considera cerrada por Workers Free.
+F01.04 conserva pendiente confirmar la modalidad efectiva y ausencia de facturación con evidencia de la cuenta. Los límites y el responsable constan en [COSTES](../COSTES.md); marcar el plan al satisfacer aceptación. No se considera cerrada por la confirmación del propietario de Workers Free.
 
 ## Entrada B: F02 — Fuente gratuita de búsqueda y precios
 
-1. Revisar derechos de display exclusivamente personal, conservación y corte de gasto del plan real. EODHD Free sigue candidato; Marketstack Free también puede ensayarse para EOD. [Revisión adicional](../evidencias/F02_FUENTES_ADICIONALES.md). Twelve Basic non-display no acredita uso en el panel.
-2. Con la cuenta y claves privadas disponibles, ejecutar [la sonda](../../experiments/provider-spike/README.md) con límite explícito. Para SEC falta un contacto verdadero en `SEC_USER_AGENT`; no inventarlo. No dar de alta ni aceptar términos en nombre del propietario.
+1. Revisar derechos de display exclusivamente personal, conservación y corte de gasto del plan real. La [búsqueda posterior](../evidencias/F02_BUSQUEDA_FUENTES.md) aporta pruebas locales de Stocklake/TGMCharts, con carencias que impiden aprobar una fuente principal. EODHD Free sigue candidato; Marketstack Free también puede ensayarse para EOD. [Revisión adicional](../evidencias/F02_FUENTES_ADICIONALES.md). Twelve Basic non-display no acredita uso en el panel.
+2. Con la cuenta y claves privadas disponibles, ejecutar [la sonda](../../experiments/provider-spike/README.md) con límite explícito. SEC ya tiene contacto verdadero privado; submissions/directorio están probados en local. Las fuentes sin clave tienen sondas repetibles y límites conocidos; continuar solo para una duda concreta. No dar de alta ni aceptar términos en nombre del propietario.
 3. Registrar búsqueda por nombres nuevos, instrumento/MIC/clase, unidad/divisa, feed y timestamp; histórico/ajuste, límites y derechos por mercado. Muestreo completo según F02: EE. UU., España, otro mercado europeo y Asia. El resultado Apple demo no es cobertura general.
 4. Repetir la prueba acotada desde Worker ya protegido. Completar [COBERTURA](../COBERTURA.md), [PROVEEDORES](../PROVEEDORES.md), [LICENCIAS](../LICENCIAS.md) y [COSTES](../COSTES.md), siguiendo [integrar-proveedor](../../.agents/skills/integrar-proveedor/SKILL.md).
 
@@ -35,4 +43,4 @@ F01.04 conserva pendientes: cuenta/plan y ausencia de facturación comprobados; 
 - [ ] Primer adaptador y búsqueda abierta reales, IDs estables y cuotas verificadas.
 - [ ] Cotización/histórico/ajustes reales y pruebas de F07/F08 completas.
 
-Si falta una entrada, avanzar por la otra solo dentro de lo autorizado. El trabajo local sintético de esta entrega no sustituye ninguna condición externa. [Estado integral](../ESTADO.md).
+Si falta una entrada, avanzar por la otra dentro del encargo vigente. El trabajo local sintético no sustituye ninguna condición externa. [Estado integral](../ESTADO.md).

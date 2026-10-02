@@ -1073,13 +1073,13 @@ F03 puede preparar estructura mientras F02 espera acceso externo. No se cierra l
 - [ ] F01.04 — Crear o usar cuenta Cloudflare y verificar Workers Free.
 - [ ] F01.05 — Activar modalidad gratuita de Access y un método de acceso del propietario.
 - [ ] F01.06 — Crear solo las cuentas gratuitas de datos necesarias para F02; revisar condiciones y posibles renovaciones.
-- [ ] F01.07 — Guardar claves mediante un mecanismo local privado y añadir exclusiones Git antes de manipularlas.
+- [x] F01.07 — Guardar claves mediante un mecanismo local privado y añadir exclusiones Git antes de manipularlas (OAuth gestionado por Wrangler; contacto SEC 0600 en `.local/`; claves financieras y secretos remotos pendientes).
 - [x] F01.08 — Crear `docs/COSTES.md`, `docs/PROVEEDORES.md` y registro de licencias.
 - [ ] F01.09 — Establecer autenticación fuerte en cuentas y un método de recuperación controlado por el propietario.
 
 **Cierre:** herramientas listas; titular identificado; ningún servicio facturable necesario; claves fuera de Git. Si falta una cuenta, indicar exactamente cuál y continuar solo trabajo que no la requiera.
 
-**Estado 2026-10-02:** entorno, remoto, visibilidad y registros completos; Wrangler ya está autenticado por OAuth y el propietario confirmó Workers Free en el panel. Facturación, Access, autenticación fuerte, cuentas de datos y claves pendientes. [Evidencia inicial](docs/evidencias/F01_F03.md) y [estado](docs/ESTADO.md).
+**Estado 2026-10-03:** entorno, remoto, visibilidad, registros y mecanismo privado local completos; Wrangler autenticado y Workers Free confirmado por el propietario. Contacto SEC privado verificado y probado localmente. Facturación, Access, autenticación fuerte, cuentas de datos y claves financieras pendientes. [Evidencia inicial](docs/evidencias/F01_F03.md) y [estado](docs/ESTADO.md).
 
 <a id="f02"></a>
 
@@ -1098,9 +1098,11 @@ F03 puede preparar estructura mientras F02 espera acceso externo. No se cierra l
 - [ ] F02.11 — Resolver cobertura insuficiente según sección 5.6; no marcar completa una aspiración global no probada.
 - [ ] F02.12 — Eliminar o desactivar el prototipo y sus credenciales cuando termine su utilidad.
 
+**Ensayo local adicional del 02-10-2026:** [Stocklake y TGMCharts](docs/evidencias/F02_BUSQUEDA_FUENTES.md) respondieron sin cuenta, con éxitos y carencias de identidad, observación, derechos y cobertura. Ningún punto abierto se considera aceptado por ese acceso; G-DATOS sigue pendiente. El propietario retomó después F01–F08; [la continuación](docs/evidencias/F01_F08_CONTINUACION.md) añade sondas reproducibles y SEC local, sin aprobar adaptadores; ver [tarea actual](docs/tareas/tarea-actual.md).
+
 **Cierre:** existe una ruta de datos gratuita demostrada para el alcance aceptado. F02 es la principal puerta de viabilidad. Si falla, el informe debe evitar que se inviertan semanas en una interfaz basada en servicios inaccesibles.
 
-**Estado 2026-10-02:** sonda y pruebas sintéticas listas; fechas de reuniones Fed/BCE extraídas localmente y acceso parcial a búsqueda OpenFIGI demostrados. Una demo pública de EODHD devolvió un año de histórico diario de Apple; no demuestra el plan gratuito general ni la licencia de visualización. La búsqueda general por nombre, precios recientes y cuentas suficientes siguen sin probarse. G-DATOS permanece pendiente; ver [cobertura](docs/COBERTURA.md), [identidad](docs/evidencias/F02_IDENTIDAD_OPENFIGI.md), [calendarios](docs/evidencias/F02_CALENDARIOS_MACRO.md) y [precios/cuentas](docs/evidencias/F02_PRECIOS_Y_CUENTAS.md).
+**Estado 2026-10-03:** sonda ampliada y 21 pruebas sintéticas listas; SEC submissions/directorio locales probados con contacto auténtico privado; calendarios Fed/BCE/BLS y acceso parcial a búsqueda OpenFIGI probados localmente. La demo pública EODHD no acredita su plan Free general. La [búsqueda posterior](docs/evidencias/F02_BUSQUEDA_FUENTES.md) probó precios/perfiles e histórico con Stocklake y cuentas/series estadounidenses con TGMCharts, sin cuenta. Faltan búsqueda abierta fiable, procedencia/frescura de cotización, ajustes, derechos completos, entradas verificadas para 20 métricas y muestra internacional aceptada. G-DATOS permanece pendiente; ver [cobertura](docs/COBERTURA.md), [identidad](docs/evidencias/F02_IDENTIDAD_OPENFIGI.md), [calendarios](docs/evidencias/F02_CALENDARIOS_MACRO.md) y [precios/cuentas](docs/evidencias/F02_PRECIOS_Y_CUENTAS.md).
 
 <a id="f03"></a>
 
@@ -1134,13 +1136,13 @@ F03 puede preparar estructura mientras F02 espera acceso externo. No se cierra l
 
 **Cierre:** contratos ejecutables, migraciones reproducibles y pruebas de unidades/fechas. Los adaptadores posteriores se ajustan al modelo común.
 
-**Estado 2026-10-02:** fase completa como contrato y persistencia local; cinco migraciones y rutas financieras preparadas con fuentes sintéticas, sin D1 remota. [API](docs/API.md), [evidencia inicial](docs/evidencias/F04_F06.md) y [ampliación](docs/evidencias/F02_F08.md).
+**Estado 2026-10-03:** fase completa como contrato y persistencia local; cinco migraciones y rutas preparadas con fuentes sintéticas. Las migraciones se verificaron también en las D1 remotas de staging y producción, sin datos financieros guardados. [API](docs/API.md), [evidencia inicial](docs/evidencias/F04_F06.md) y [ampliación](docs/evidencias/F02_F08.md).
 
 <a id="f05"></a>
 
 ### F05. Preparar infraestructura y acceso
 
-- [ ] F05.01 — Crear D1 de staging y producción; registrar bindings distintos.
+- [x] F05.01 — Crear D1 de staging y producción; registrar bindings distintos (bases privadas reales, cinco migraciones y nueve tablas vacías verificadas en cada una).
 - [ ] F05.02 — Publicar armazón con `APP_READY=false` y sin datos financieros.
 - [ ] F05.03 — Proteger hostnames, restringir identidad y desactivar rutas alternativas innecesarias.
 - [x] F05.04 — Implementar verificación JWT, rotación de claves públicas y rechazo seguro ante configuración incompleta (prueba sintética local; Access real pendiente).
@@ -1152,7 +1154,7 @@ F03 puede preparar estructura mientras F02 espera acceso externo. No se cierra l
 
 **Cierre G-ACCESO:** la API de datos es inaccesible para terceros y el propietario entra desde el móvil. Configuración de autenticación ausente implica cierre de acceso, no apertura.
 
-**Estado 2026-10-02:** G-ACCESO pendiente. Hay sesión OAuth de Wrangler, sin permiso de Access; no existe política Access, D1 remota ni prueba de móvil/CPU. Las URL de versión están desactivadas en el artefacto local; este proyecto no ha creado previews con nombre. [Preparación](docs/DESPLIEGUE.md).
+**Estado 2026-10-03:** G-ACCESO pendiente. Hay sesión OAuth sin permiso Access. D1 remotas y bindings distintos completos; no hay Worker desplegado, política Access ni prueba de móvil/CPU. Los controles locales de secretos/artefactos pasan; F05.07 conserva la comprobación remota pendiente. [Evidencia](docs/evidencias/F01_F08_CONTINUACION.md). Las URL de versión están desactivadas en el artefacto local; este proyecto no ha creado previews con nombre. [Preparación](docs/DESPLIEGUE.md).
 
 <a id="f06"></a>
 
@@ -1822,4 +1824,4 @@ Se revisaron el índice, la numeración de fases y tareas, los criterios de cier
 | JWT | Token firmado que permite verificar una sesión o identidad. |
 | SSRF | Uso indebido de un servidor para consultar destinos elegidos por un atacante. |
 
-**Siguiente paso desde el estado actual:** seguir [F01.04](docs/tareas/tarea-actual.md), verificar Cloudflare Free y proteger Access; continuar pruebas de datos de F02. F03 aporta el armazón local, pero G-DATOS sigue siendo la puerta de viabilidad antes de construir la ficha completa. Ver [estado](docs/ESTADO.md).
+**Siguiente paso desde el estado actual:** configurar Access gratuito con la identidad y AUD reales para completar F01.05/F05.03; el OAuth actual no tiene ese permiso. D1 remotas y sondas reproducibles ya están entregadas y comprobadas; [continuación](docs/evidencias/F01_F08_CONTINUACION.md). La entrada F02 conserva fuentes/cobertura pendientes. G-DATOS/G-ACCESO siguen abiertas antes de activar la ficha completa. Ver [tarea actual](docs/tareas/tarea-actual.md) y [estado](docs/ESTADO.md).
