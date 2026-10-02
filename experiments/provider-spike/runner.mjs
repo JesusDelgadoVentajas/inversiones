@@ -82,10 +82,12 @@ export async function runProbes(probes, {
       }
       const body = await readLimited(response, maxBytes);
       const data = probe.format === 'json' ? JSON.parse(body.text) : body.text;
-      const valid = Boolean(probe.validate(data));
+      const summary = probe.summarize?.(data);
+      const valid = Boolean(probe.validate(data, summary));
       results.push({ ...result, bytes: body.bytes, status: valid ? 'PROBADO' : 'FALLO',
-        reason: valid ? 'ACCESS_AND_BASIC_SHAPE_ONLY' :
-          probe.invalidReason ?? 'INVALID_OR_EMPTY_RESPONSE' });
+        reason: valid ? (summary ? 'ACCESS_AND_DATE_EXTRACTION_ONLY' : 'ACCESS_AND_BASIC_SHAPE_ONLY') :
+          probe.invalidReason ?? 'INVALID_OR_EMPTY_RESPONSE',
+        ...(valid && summary ? { summary } : {}) });
     } catch (error) {
       // No imprimir mensajes del proveedor, URLs con parámetros, cabeceras ni cuerpos.
       const reason = error instanceof Error && error.message === 'RESPONSE_TOO_LARGE'
@@ -100,7 +102,7 @@ export async function runProbes(probes, {
   }
   return {
     mode: live ? 'live' : 'dry-run', requests,
-    scope: 'Solo acceso local y forma básica. No certifica licencia, frescura, cobertura ni Cloudflare.',
+    scope: 'Prueba local de acceso, forma y, si procede, fechas. No certifica licencia, frescura, cobertura ni Cloudflare.',
     results,
   };
 }

@@ -7,7 +7,7 @@
     "dev": "vite",
     "typecheck": "tsc -b",
     "lint": "oxlint",
-    "test:unit": "node --test ../experiments/provider-spike/runner.test.mjs",
+    "test:unit": "node --test ../experiments/provider-spike/*.test.mjs",
     "test:integration": "vitest run --config vitest.config.ts",
     "test:contracts": "vitest run --config vitest.contracts.config.ts",
     "test:migrations": "node scripts/test-migrations.mjs",

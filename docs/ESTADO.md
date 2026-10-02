@@ -10,7 +10,7 @@
 - Contratos ejecutables para emisor, instrumento, procedencia, bloques y tipos financieros; [API activa y prevista](API.md). Cuatro migraciones y pruebas D1 locales desde vacío y desde versiones previas, con datos preservados.
 - Verificador JWT de Access con JWKS, firma RS256, emisor, audiencia, fechas y correo del propietario. Las rutas `/api/v1/*` fallan de forma cerrada sin configuración. Pruebas sintéticas en Workerd, incluida la ruta real con JWKS simulado; **ninguna sesión Access real probada**.
 - Capa de proveedor sin fuentes habilitadas: contratos opcionales, transporte HTTPS con origen aprobado y límites, cuotas D1 atómicas, tres plazas simultáneas por proveedor, caché condicionada a permiso de retención, bloqueos, reintentos y circuito. Las [pruebas](evidencias/F04_F06.md) usan respuestas sintéticas; no demuestran licencia ni cobertura.
-- [Sonda local de OpenFIGI](evidencias/F02_IDENTIDAD_OPENFIGI.md): acceso sin clave comprobado para identificar instrumentos; «Inditex», «Alphabet», «Berkshire Hathaway» y «Santander» no produjeron una acción ordinaria de nombre coincidente en la primera página. [Demo EODHD](evidencias/F02_PRECIOS_Y_CUENTAS.md): histórico diario de Apple obtenido localmente, sin demostrar derechos ni cobertura de su plan Free. No hay cotizaciones intradía ni acceso desde Worker.
+- [Sonda local de OpenFIGI](evidencias/F02_IDENTIDAD_OPENFIGI.md): acceso sin clave comprobado para identificar instrumentos; «Inditex», «Alphabet», «Berkshire Hathaway» y «Santander» no produjeron una acción ordinaria de nombre coincidente en la primera página. [Demo EODHD](evidencias/F02_PRECIOS_Y_CUENTAS.md): histórico diario de Apple obtenido localmente, sin demostrar derechos ni cobertura de su plan Free. [Calendarios Fed/BCE](evidencias/F02_CALENDARIOS_MACRO.md): fechas de reuniones futuras extraídas localmente, sin horas ni verificación en Worker. No hay cotizaciones intradía ni acceso desde Worker.
 - `preview_urls=false` en raíz, staging y producción, comprobado en ambas compilaciones; no se configura `previews`. Esto evita URL de versión en la configuración local, pero no sustituye Access ni protege por sí mismo los previews con nombre.
 - CI sin claves reales y scripts de instalación/comprobación en [README](../README.md) y [app/README](../app/README.md). CI remota pendiente de push.
 
@@ -23,7 +23,7 @@
 | F05 / G-ACCESO | D1 remotas reales y separadas, protección de todos los hostnames/previews, secretos, despliegue inerte, móvil y CPU reales. | No hay publicación ni acceso personal verificado. [Preparación](DESPLIEGUE.md). |
 | F06 | Alternativa real aprobada y comprobación de cuotas contractuales entre entornos reales; integrar primer adaptador cuando pase F02. | Capa común y partición de cuota probadas solo con datos sintéticos. |
 
-Las dos páginas oficiales Fed/BCE respondieron HTTP 200 en pruebas locales de F02, pero no se extrajeron fechas. No hay D1 remota ni consultas reales a Finnhub, Alpaca o SEC. Los costes y licencias siguen sujetos a comprobación de la cuenta y de cada proveedor: [COSTES](COSTES.md), [LICENCIAS](LICENCIAS.md).
+Las dos páginas oficiales Fed/BCE respondieron HTTP 200 y permitieron extraer fechas de reuniones futuras en pruebas locales de F02; la integración y el refresco siguen pendientes. No hay D1 remota ni consultas reales a Finnhub, Alpaca o SEC. Los costes y licencias siguen sujetos a comprobación de la cuenta y de cada proveedor: [COSTES](COSTES.md), [LICENCIAS](LICENCIAS.md).
 
 ## Próximo paso
 

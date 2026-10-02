@@ -1100,7 +1100,7 @@ F03 puede preparar estructura mientras F02 espera acceso externo. No se cierra l
 
 **Cierre:** existe una ruta de datos gratuita demostrada para el alcance aceptado. F02 es la principal puerta de viabilidad. Si falla, el informe debe evitar que se inviertan semanas en una interfaz basada en servicios inaccesibles.
 
-**Estado 2026-10-02:** sonda y pruebas sintéticas listas; acceso HTML local a calendarios Fed/BCE y acceso parcial a búsqueda OpenFIGI demostrados. Una demo pública de EODHD devolvió un año de histórico diario de Apple; no demuestra el plan gratuito general ni la licencia de visualización. La búsqueda general por nombre, precios recientes y cuentas suficientes siguen sin probarse. G-DATOS permanece pendiente; ver [cobertura](docs/COBERTURA.md), [identidad](docs/evidencias/F02_IDENTIDAD_OPENFIGI.md) y [precios/cuentas](docs/evidencias/F02_PRECIOS_Y_CUENTAS.md).
+**Estado 2026-10-02:** sonda y pruebas sintéticas listas; fechas de reuniones Fed/BCE extraídas localmente y acceso parcial a búsqueda OpenFIGI demostrados. Una demo pública de EODHD devolvió un año de histórico diario de Apple; no demuestra el plan gratuito general ni la licencia de visualización. La búsqueda general por nombre, precios recientes y cuentas suficientes siguen sin probarse. G-DATOS permanece pendiente; ver [cobertura](docs/COBERTURA.md), [identidad](docs/evidencias/F02_IDENTIDAD_OPENFIGI.md), [calendarios](docs/evidencias/F02_CALENDARIOS_MACRO.md) y [precios/cuentas](docs/evidencias/F02_PRECIOS_Y_CUENTAS.md).
 
 <a id="f03"></a>
 

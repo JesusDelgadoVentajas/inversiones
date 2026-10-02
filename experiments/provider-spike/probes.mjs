@@ -1,4 +1,6 @@
 // Pruebas de acceso y formato; no certifican licencia ni cobertura del producto.
+import { calendarSummary, extractEcbMeetings, extractFedMeetings } from './calendar-extract.mjs';
+
 export function createProbes({ query = 'Apple', symbol = 'AAPL', cik = '0000320193' } = {}) {
   if (!/^\d{10}$/.test(cik)) throw new Error('El CIK debe tener diez dígitos.');
   if (!query.trim() || query.length > 100 || !/^[A-Za-z0-9.^:/-]{1,30}$/.test(symbol)) {
@@ -24,13 +26,15 @@ export function createProbes({ query = 'Apple', symbol = 'AAPL', cik = '00003201
       id: 'fed-calendar', provider: 'federal-reserve', capability: 'calendar-resource',
       url: 'https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm',
       credentials: {}, format: 'html',
-      validate: (body) => /FOMC/i.test(body) && /Meeting calendars/i.test(body),
+      summarize: (body) => calendarSummary(extractFedMeetings(body)),
+      validate: (_body, summary) => summary.upcoming > 0,
     },
     {
       id: 'ecb-calendar', provider: 'ecb', capability: 'calendar-resource',
       url: 'https://www.ecb.europa.eu/press/calendars/mgcgc/html/index.en.html',
       credentials: {}, format: 'html',
-      validate: (body) => /Governing Council/i.test(body) && /monetary policy meeting/i.test(body),
+      summarize: (body) => calendarSummary(extractEcbMeetings(body)),
+      validate: (_body, summary) => summary.upcoming > 0,
     },
     {
       id: 'sec-submissions', provider: 'sec', capability: 'filings',
