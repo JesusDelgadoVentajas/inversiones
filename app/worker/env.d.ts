@@ -4,5 +4,5 @@ interface Env {
   DB?: D1Database
   ACCESS_TEAM_DOMAIN?: string
   ACCESS_AUD?: string
-  ACCESS_OWNER_EMAIL?: string
+  ACCESS_ALLOWED_EMAILS?: string
 }

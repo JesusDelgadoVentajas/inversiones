@@ -1,9 +1,16 @@
-# Primera publicación de staging y prueba móvil
+# Configurar Access para dos correos autorizados
 
-- **Encargo vigente:** publicar por primera vez en Cloudflare y probar desde el móvil del propietario. Publicación del armazón autorizada; no habilitar fuentes financieras ni contratar servicios.
+- **Encargo vigente:** restringir la web a los dos correos indicados por el propietario, sin publicarlos en Git ni frontend. Autorización para configurar Access y desplegar el cambio en staging; presupuesto 0 € y fuentes desactivadas.
+- **Trabajo independiente completado:** guard de API para lista privada JSON de una o dos direcciones exactas, sin comodines/alias; pruebas de ambos correos, terceros y listas inválidas. 139 comprobaciones de comportamiento pasan en la suite local. Lista y política concreta preparadas en `.local/two-email-access/`, privada e ignorada. [Evidencia](../evidencias/F05_DOS_CORREOS.md).
+- **Entrada externa pendiente:** el propietario confirmó que el panel pide **Set up Zero Trust**. Guiar el alta en Free, luego proteger `inversiones-staging` con **All traffic**, una única regla `Allow → Include → Emails` para esos dos correos y método One-time PIN. El OAuth no tiene permiso Access y la API devuelve 403.
+- **Siguiente comprobación:** completar política/secretos de staging, probar inicio de sesión de ambas direcciones y rechazo anónimo/terceros, sesión móvil y CPU. Conservar flags en falso hasta superar G-ACCESO/G-DATOS. El código de la lista no protege por sí solo los archivos estáticos.
+
+## Primera publicación de staging y prueba móvil
+
+- **Encargo anterior:** publicar por primera vez en Cloudflare y probar desde el móvil del propietario. Armazón publicado; no se habilitaron fuentes financieras ni contrataron servicios.
 - **Resultado entregado:** staging inerte desplegado desde `6d2e7a0`; configuración remota comprobada y carga confirmada por el propietario desde su teléfono. La pantalla de preparación es pública; Access y producción pendientes. [Evidencia](../evidencias/F05_PRIMERA_PUBLICACION.md).
 - **Comprobaciones:** 136 pruebas locales pasan con Node 24.21.0; Chromium remoto a 375/320 px, API sin datos, rechazo seguro por Access ausente y URL de versión desactivada. La confirmación móvil acredita la carga, no el inicio de sesión ni métricas/noticias.
-- **Siguiente tarea concreta:** configurar Access para `inversiones-staging` desde el panel o un mecanismo con permisos adecuados; permitir solo el correo del propietario. Introducir secretos Access de staging de forma privada y probar JWT, acceso anónimo/ajeno/caducado y sesión móvil. Mantener ambos flags en falso hasta superar G-ACCESO y G-DATOS.
+- **Pendiente conservado:** configurar Access para `inversiones-staging`; la nueva petición concreta dos correos autorizados. Introducir secretos Access de staging de forma privada y probar JWT, acceso anónimo/ajeno/caducado y sesión móvil. Mantener ambos flags en falso hasta superar G-ACCESO y G-DATOS.
 
 ## Trabajo anterior F02, F09 y F10
 

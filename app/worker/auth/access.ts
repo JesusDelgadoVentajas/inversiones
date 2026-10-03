@@ -1,23 +1,27 @@
 import { createRemoteJWKSet, jwtVerify } from 'jose'
 import type { JWTVerifyGetKey } from 'jose'
+import { z } from 'zod'
 
 export interface AccessSettings {
   ACCESS_TEAM_DOMAIN?: string
   ACCESS_AUD?: string
-  ACCESS_OWNER_EMAIL?: string
+  ACCESS_ALLOWED_EMAILS?: string
 }
 
 type AccessResult = { ok: true } | { ok: false; code: 'ACCESS_NOT_CONFIGURED' | 'ACCESS_TOKEN_MISSING' | 'ACCESS_DENIED' }
 let cachedKeys: { domain: string; keys: ReturnType<typeof createRemoteJWKSet> } | undefined
+const emailsSchema = z.array(z.email()).min(1).max(2)
 
 function configuration(env: AccessSettings) {
   const domain = env.ACCESS_TEAM_DOMAIN
   const audience = env.ACCESS_AUD
-  const ownerEmail = env.ACCESS_OWNER_EMAIL
+  let emails: unknown
+  try { emails = JSON.parse(env.ACCESS_ALLOWED_EMAILS ?? '') } catch { return null }
+  const allowedEmails = emailsSchema.safeParse(emails)
   if (!domain || !/^https:\/\/[a-z0-9-]+\.cloudflareaccess\.com$/.test(domain) ||
       !audience || !/^[a-f0-9]{64}$/i.test(audience) ||
-      !ownerEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(ownerEmail)) return null
-  return { domain, audience, ownerEmail: ownerEmail.toLowerCase() }
+      !allowedEmails.success) return null
+  return { domain, audience, allowedEmails: allowedEmails.data.map((email) => email.toLowerCase()) }
 }
 
 function remoteKeys(domain: string) {
@@ -46,7 +50,7 @@ export async function verifyAccess(request: Request, env: AccessSettings,
     })
     const now = Math.floor(Date.now() / 1000)
     if (protectedHeader.alg !== 'RS256' || payload.type !== 'app' ||
-        typeof payload.email !== 'string' || payload.email.toLowerCase() !== config.ownerEmail ||
+        typeof payload.email !== 'string' || !config.allowedEmails.includes(payload.email.toLowerCase()) ||
         typeof payload.iat !== 'number' || payload.iat > now + 5 ||
         typeof payload.exp !== 'number' || payload.exp <= payload.iat) {
       return { ok: false, code: 'ACCESS_DENIED' }

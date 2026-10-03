@@ -26,6 +26,17 @@ test('revisa por separado el correo SEC aunque no se filtre todo el User-Agent',
   assert.equal(containsSecret('contact unavailable', values), false)
 })
 
+test('detecta cada correo autorizado aunque se filtre sin la lista JSON completa', () => {
+  const emails = ['synthetic-first@example.invalid', 'synthetic-second@example.invalid']
+  const values = configuredValues([{ ACCESS_ALLOWED_EMAILS: JSON.stringify(emails) }])
+  for (const email of emails) {
+    for (const value of [email, encodeURIComponent(email), Buffer.from(email).toString('base64')]) {
+      assert.equal(containsSecret('public-contact=' + value, values), true)
+    }
+  }
+  assert.equal(containsSecret('ACCESS_ALLOWED_EMAILS: readFromPrivateEnvironment', values), false)
+})
+
 test('conserva los patrones de claves privadas sin convertir nombres de variables en secretos', () => {
   assert.equal(containsSecret(['-----BEGIN', 'PRIVATE KEY-----'].join(' ')), true)
   assert.equal(containsSecret('github_pat_' + 'SYNTHETIC'.repeat(6)), true)

@@ -1,4 +1,4 @@
-export const privateNames = ['ACCESS_TEAM_DOMAIN', 'ACCESS_AUD', 'ACCESS_OWNER_EMAIL',
+export const privateNames = ['ACCESS_TEAM_DOMAIN', 'ACCESS_AUD', 'ACCESS_ALLOWED_EMAILS', 'ACCESS_OWNER_EMAIL',
   'SEC_USER_AGENT', 'FINNHUB_API_KEY', 'ALPACA_API_KEY', 'ALPACA_API_SECRET', 'STOCKLAKE_API_KEY']
 
 const environments = { staging: 'inversiones-staging', production: 'inversiones' }

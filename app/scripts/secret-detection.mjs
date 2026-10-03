@@ -18,8 +18,8 @@ export function configuredValues(environments) {
       const value = env[name]?.trim()
       if (!value || value.length < 8) continue
       values.add(value)
-      if (name === 'SEC_USER_AGENT') {
-        for (const contact of value.match(/[^\s<>]+@[^\s<>]+\.[^\s<>]+/g) ?? []) values.add(contact)
+      if (name === 'SEC_USER_AGENT' || name === 'ACCESS_ALLOWED_EMAILS') {
+        for (const contact of value.match(/[^\s<>,"\[\]]+@[^\s<>,"\[\]]+\.[^\s<>,"\[\]]+/g) ?? []) values.add(contact)
       }
     }
   }

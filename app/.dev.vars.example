@@ -1,2 +1,5 @@
 # Ejemplo sin valores privados. APP_READY y ALLOW_LIVE_PROVIDERS ya son false en wrangler.jsonc.
 # Las futuras claves solo se incorporarán tras validar derechos, cuota y acceso personal.
+# ACCESS_ALLOWED_EMAILS='["owner-one@example.invalid","owner-two@example.invalid"]'
+# ACCESS_TEAM_DOMAIN=https://example-team.cloudflareaccess.com
+# ACCESS_AUD se obtiene de la aplicación Access del entorno; no usar una audiencia ficticia en remoto.

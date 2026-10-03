@@ -9,7 +9,7 @@ import { quoteBlock } from '../fixtures/contracts.js'
 const domain = 'https://test-team.cloudflareaccess.com'
 const audience = 'a'.repeat(64)
 const settings = { ACCESS_TEAM_DOMAIN: domain, ACCESS_AUD: audience,
-  ACCESS_OWNER_EMAIL: 'owner@example.org' }
+  ACCESS_ALLOWED_EMAILS: JSON.stringify(['owner@example.org', 'alternate@example.net']) }
 let privateKey: CryptoKey
 let keys: ReturnType<typeof createLocalJWKSet>
 let jwk: Awaited<ReturnType<typeof exportJWK>>
@@ -49,7 +49,7 @@ describe('Access local sin red ni credenciales reales', () => {
     })
   })
 
-  it('acepta solo firma, emisor, audiencia y correo del propietario', async () => {
+  it('acepta solo firma, emisor, audiencia y un correo autorizado', async () => {
     const valid = await token()
     expect(await verifyAccess(request(valid), settings, keys)).toEqual({ ok: true })
     expect(await verifyAccess(request(valid), { ...settings, ACCESS_AUD: 'b'.repeat(64) }, keys))
@@ -58,12 +58,33 @@ describe('Access local sin red ni credenciales reales', () => {
       ACCESS_TEAM_DOMAIN: 'https://other-team.cloudflareaccess.com' }, keys))
       .toEqual({ ok: false, code: 'ACCESS_DENIED' })
     expect(await verifyAccess(request(valid), { ...settings,
-      ACCESS_OWNER_EMAIL: 'other@example.org' }, keys)).toEqual({ ok: false, code: 'ACCESS_DENIED' })
+      ACCESS_ALLOWED_EMAILS: '["other@example.org"]' }, keys)).toEqual({ ok: false, code: 'ACCESS_DENIED' })
     const parts = valid.split('.')
     const modified = `${parts[0]}.${parts[1]}.${parts[2][0] === 'A' ? 'B' : 'A'}${parts[2].slice(1)}`
     expect(await verifyAccess(request(modified), settings, keys)).toEqual({
       ok: false, code: 'ACCESS_DENIED',
     })
+  })
+
+  it('admite ambos correos y rechaza terceros, dominios completos y alias no autorizados', async () => {
+    for (const email of ['owner@example.org', 'alternate@example.net', 'OWNER@EXAMPLE.ORG']) {
+      expect(await verifyAccess(request(await token({ email })), settings, keys)).toEqual({ ok: true })
+    }
+    for (const email of ['other@example.org', 'other@example.net', 'owner+alias@example.org',
+      'owner@example.org.attacker.net', ' owner@example.org']) {
+      expect(await verifyAccess(request(await token({ email })), settings, keys))
+        .toEqual({ ok: false, code: 'ACCESS_DENIED' })
+    }
+  })
+
+  it('cierra acceso con una lista ausente, vacía, inválida o que excede dos correos', async () => {
+    for (const ACCESS_ALLOWED_EMAILS of [undefined, '', 'invalid-json', 'null', '{}',
+      '"owner@example.org"', '[]', '["owner@example.org",null]', '["*@example.org"]',
+      '["owner@example.org","invalid-email"]',
+      '["owner@example.org","alternate@example.net","third@example.org"]']) {
+      expect(await verifyAccess(request(await token()), { ...settings, ACCESS_ALLOWED_EMAILS }, keys))
+        .toEqual({ ok: false, code: 'ACCESS_NOT_CONFIGURED' })
+    }
   })
 
   it('rechaza caducidad, comienzo futuro y token de servicio sin identidad', async () => {
@@ -105,17 +126,19 @@ describe('Access local sin red ni credenciales reales', () => {
     })
   })
 
-  it('verifica JWKS y JWT en la ruta real antes de declarar los datos no listos', async () => {
+  it('verifica ambos correos en la ruta real y rechaza un tercero antes de servir datos', async () => {
     const mockedFetch = vi.fn(async () => Response.json({ keys: [jwk] }))
     vi.stubGlobal('fetch', mockedFetch)
     try {
-      const response = await worker.fetch(new Request('https://local.test/api/v1/capabilities', {
-        headers: { 'cf-access-jwt-assertion': await token() },
-      }), {
-        ...settings, APP_READY: 'false', ALLOW_LIVE_PROVIDERS: 'false',
-      } as Env)
-      expect(response.status).toBe(503)
-      expect(await response.json()).toMatchObject({ code: 'APP_NOT_READY' })
+      for (const email of ['owner@example.org', 'alternate@example.net', 'other@example.org']) {
+        const response = await worker.fetch(new Request('https://local.test/api/v1/capabilities', {
+          headers: { 'cf-access-jwt-assertion': await token({ email }) },
+        }), { ...settings, APP_READY: 'false', ALLOW_LIVE_PROVIDERS: 'false' } as Env)
+        expect(response.status).toBe(email === 'other@example.org' ? 403 : 503)
+        expect(await response.json()).toMatchObject({
+          code: email === 'other@example.org' ? 'ACCESS_DENIED' : 'APP_NOT_READY',
+        })
+      }
       expect(mockedFetch).toHaveBeenCalledTimes(1)
     } finally {
       vi.unstubAllGlobals()
