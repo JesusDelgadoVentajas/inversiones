@@ -1079,7 +1079,7 @@ F03 puede preparar estructura mientras F02 espera acceso externo. No se cierra l
 
 **Cierre:** herramientas listas; titular identificado; ningún servicio facturable necesario; claves fuera de Git. Si falta una cuenta, indicar exactamente cuál y continuar solo trabajo que no la requiera.
 
-**Estado 2026-10-03:** entorno, remoto, visibilidad, registros y mecanismo privado local completos; Wrangler autenticado y Workers Free confirmado por el propietario. Contacto SEC privado verificado y probado localmente. Facturación, Access, autenticación fuerte, cuentas de datos y claves financieras pendientes. [Evidencia inicial](docs/evidencias/F01_F03.md) y [estado](docs/ESTADO.md).
+**Estado 2026-10-03:** entorno, remoto, visibilidad, registros y mecanismo privado local completos; Wrangler autenticado y Workers Free confirmado por el propietario. Alta Zero Trust Free completada por el propietario con importe 0 €, sin cobro; política e inicio de sesión Access pendientes. Contacto SEC privado verificado y probado localmente. Comprobación independiente de facturación, autenticación fuerte, cuentas de datos y claves financieras pendientes. [Evidencia inicial](docs/evidencias/F01_F03.md), [Access](docs/evidencias/F05_DOS_CORREOS.md) y [estado](docs/ESTADO.md).
 
 <a id="f02"></a>
 
@@ -1154,7 +1154,7 @@ F03 puede preparar estructura mientras F02 espera acceso externo. No se cierra l
 
 **Cierre G-ACCESO:** la API de datos es inaccesible para terceros y el propietario entra desde el móvil. Configuración de autenticación ausente implica cierre de acceso, no apertura.
 
-**Estado 2026-10-03:** G-ACCESO pendiente. D1 remotas y bindings distintos completos; staging inerte desplegado y carga confirmada desde el móvil del propietario. La pantalla de preparación es pública, sin fuentes financieras activas. El OAuth no tiene permiso Access; faltan política, secretos, JWT/sesión reales y CPU. Las URL de versión están desactivadas también remotamente; este proyecto no ha creado previews con nombre. F05.07 conserva la comprobación de secretos/registros remotos pendiente. [Primera publicación](docs/evidencias/F05_PRIMERA_PUBLICACION.md), [bases privadas](docs/evidencias/F01_F08_CONTINUACION.md) y [procedimiento](docs/DESPLIEGUE.md).
+**Estado 2026-10-03:** G-ACCESO pendiente. D1 remotas y bindings distintos completos; staging inerte desplegado y carga de la primera publicación confirmada desde el móvil del propietario. Actualización `6ff72ff` para dos correos y secreto `ACCESS_ALLOWED_EMAILS` instalados en staging; alta Zero Trust Free completada según el propietario. La pantalla de preparación sigue pública, sin fuentes financieras activas. El OAuth no tiene permiso Access; faltan política, dominio/AUD, configuración de producción, JWT/sesión reales y CPU. Las URL de versión están desactivadas también remotamente; este proyecto no ha creado previews con nombre. F05.07 conserva la comprobación de secretos/registros remotos pendiente. [Dos correos](docs/evidencias/F05_DOS_CORREOS.md), [primera publicación](docs/evidencias/F05_PRIMERA_PUBLICACION.md), [bases privadas](docs/evidencias/F01_F08_CONTINUACION.md) y [procedimiento](docs/DESPLIEGUE.md).
 
 <a id="f06"></a>
 

@@ -110,10 +110,10 @@ Este registro conserva decisiones y motivos. El avance operativo se mantiene en 
 ## D013 — Dos correos exactos en configuración privada
 
 - **Fecha:** 2026-10-03.
-- **Estado:** CÓDIGO Y PRUEBAS LOCALES COMPLETOS; ACCESS REAL PENDIENTE.
+- **Estado:** CÓDIGO Y LISTA PRIVADA DESPLEGADOS EN STAGING; POLÍTICA Y SESIÓN ACCESS REAL PENDIENTES.
 - **Decisión:** permitir las dos direcciones autorizadas expresamente por el propietario, sin versionar sus valores. `ACCESS_ALLOWED_EMAILS` es un secreto JSON de una o dos direcciones válidas; sustituye el correo único. Coincidencia exacta sin distinguir mayúsculas; no ampliar por dominio, comodín ni alias. La política de Cloudflare debe contener las mismas dos direcciones y verificar el buzón mediante PIN.
 - **Motivo:** ambas direcciones deben acceder a la misma aplicación personal. Una política de borde que acepte Gmail no sirve si la API solo permite el correo anterior; se preparan ambos controles sin convertir la aplicación en un producto multiusuario.
-- **Consecuencia:** listas ausentes/incorrectas o excesivas cierran API; firma/audiencia/fechas siguen siendo obligatorias. El detector de secretos revisa también cada correo por separado. Conservar la pantalla de preparación y las fuentes apagadas mientras falte configurar Zero Trust/Access. [Evidencia](evidencias/F05_DOS_CORREOS.md).
+- **Consecuencia:** listas ausentes/incorrectas o excesivas cierran API; firma/audiencia/fechas siguen siendo obligatorias. El detector de secretos revisa también cada correo por separado. El alta Zero Trust Free fue completada por el propietario; conservar la pantalla de preparación y las fuentes apagadas mientras falten política, dominio, AUD y verificación Access real. [Evidencia](evidencias/F05_DOS_CORREOS.md).
 
 ## Añadir una decisión
 

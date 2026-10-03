@@ -2,7 +2,8 @@
 
 - **Encargo vigente:** restringir la web a los dos correos indicados por el propietario, sin publicarlos en Git ni frontend. Autorización para configurar Access y desplegar el cambio en staging; presupuesto 0 € y fuentes desactivadas.
 - **Trabajo independiente completado:** guard de API para lista privada JSON de una o dos direcciones exactas, sin comodines/alias; pruebas de ambos correos, terceros y listas inválidas. 139 comprobaciones de comportamiento pasan en la suite local. Lista y política concreta preparadas en `.local/two-email-access/`, privada e ignorada. [Evidencia](../evidencias/F05_DOS_CORREOS.md).
-- **Entrada externa pendiente:** el propietario confirmó que el panel pide **Set up Zero Trust**. Guiar el alta en Free, luego proteger `inversiones-staging` con **All traffic**, una única regla `Allow → Include → Emails` para esos dos correos y método One-time PIN. El OAuth no tiene permiso Access y la API devuelve 403.
+- **Preparación desplegada:** código `6ff72ff`, versión `ef8d557e-c689-4ce8-8b18-c1386105ec02`; secreto `ACCESS_ALLOWED_EMAILS` instalado y su nombre comprobado remotamente. La pantalla todavía devuelve 200 sin login y la API 503 `ACCESS_NOT_CONFIGURED`.
+- **Entrada externa pendiente:** alta Zero Trust Free completada según el propietario, con importe 0 € y sin cobro. El panel todavía indica **Not protected yet**. Proteger `inversiones-staging` con **All traffic**, una única regla `Allow → Include → Emails` para esos dos correos y método One-time PIN; obtener dominio y AUD reales. El OAuth no tiene permiso Access y la consulta de aplicaciones devolvió 403.
 - **Siguiente comprobación:** completar política/secretos de staging, probar inicio de sesión de ambas direcciones y rechazo anónimo/terceros, sesión móvil y CPU. Conservar flags en falso hasta superar G-ACCESO/G-DATOS. El código de la lista no protege por sí solo los archivos estáticos.
 
 ## Primera publicación de staging y prueba móvil
