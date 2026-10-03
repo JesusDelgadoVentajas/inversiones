@@ -1,23 +1,30 @@
-# Continuación autónoma F02, F09 y F10
+# Primera publicación de staging y prueba móvil
 
-- **Encargo vigente:** validar cuentas SEC/XBRL, contrastar TGMCharts y ampliar las pruebas de fuentes; desarrollar todo lo independiente posible de F09 y F10. Verificar código/cifras/noticias, actualizar seguimiento y commit local. Se conserva el trabajo anterior de F01–F08 y sus entradas externas.
+- **Encargo vigente:** publicar por primera vez en Cloudflare y probar desde el móvil del propietario. Publicación del armazón autorizada; no habilitar fuentes financieras ni contratar servicios.
+- **Resultado entregado:** staging inerte desplegado desde `6d2e7a0`; configuración remota comprobada y carga confirmada por el propietario desde su teléfono. La pantalla de preparación es pública; Access y producción pendientes. [Evidencia](../evidencias/F05_PRIMERA_PUBLICACION.md).
+- **Comprobaciones:** 136 pruebas locales pasan con Node 24.21.0; Chromium remoto a 375/320 px, API sin datos, rechazo seguro por Access ausente y URL de versión desactivada. La confirmación móvil acredita la carga, no el inicio de sesión ni métricas/noticias.
+- **Siguiente tarea concreta:** configurar Access para `inversiones-staging` desde el panel o un mecanismo con permisos adecuados; permitir solo el correo del propietario. Introducir secretos Access de staging de forma privada y probar JWT, acceso anónimo/ajeno/caducado y sesión móvil. Mantener ambos flags en falso hasta superar G-ACCESO y G-DATOS.
+
+## Trabajo anterior F02, F09 y F10
+
+- **Encargo anterior:** validar cuentas SEC/XBRL, contrastar TGMCharts y ampliar las pruebas de fuentes; desarrollar todo lo independiente posible de F09 y F10. Trabajo entregado en commit local; se conservan sus entradas externas.
 - **Punto de partida:** [Stocklake/TGMCharts ensayadas](../evidencias/F02_BUSQUEDA_FUENTES.md), sin fuente principal aprobada. Armazón local F03/F04 y partes de F05–F08 comprobados con datos sintéticos. No publicar la web ni activar proveedores sin satisfacer las puertas correspondientes.
 - **Resultado entregado:** normalización local, revisiones/trimestres/TTM, catálogo M01–M32, API/vistas de cuentas/métricas/noticias y saneado/paginación y publicaciones regulatorias SEC. 136 pruebas locales y 15 referencias primarias pasan; 24 cifras TGM contrastadas con SEC. [Evidencia actual](../evidencias/F02_F09_F10.md). D1 y resultados anteriores se conservan en [su evidencia](../evidencias/F01_F08_CONTINUACION.md).
-- **Bloqueos conservados:** Access/MFA/facturación, claves de otras fuentes, prueba de móvil/CPU y aprobación internacional de datos. Contacto y normalización SEC US GAAP acotada resueltos en local; no acreditan adaptador aprobado ni acceso/CPU desde Worker. No se inventan credenciales ni se crean cuentas de datos por el titular.
+- **Bloqueos conservados:** Access/MFA/facturación, claves de otras fuentes, sesión/métricas en móvil, CPU y aprobación internacional de datos. La carga del armazón móvil ya está confirmada. Contacto y normalización SEC US GAAP acotada resueltos en local; no acreditan adaptador aprobado ni acceso/CPU financiero desde Worker. No se inventan credenciales ni se crean cuentas de datos por el titular.
 - **Siguiente trabajo concreto:** resolver Access; probar SEC por conceptos desde Worker protegido con JWT/CPU y aprobar política del adaptador. En paralelo, cerrar precio/noticias y derechos. Sin entrada nueva o duda concreta, no repetir ensayos ni inventar permisos.
 
 ## Pendientes del encargo anterior F02–F08
 
 - **Estado anterior:** trabajo independiente local hasta F08 entregado; aceptación externa pendiente. [Evidencia](../evidencias/F02_F08.md).
 - **Alcance conservado:** avanzar dentro de F01–F08 por el nuevo encargo, sin habilitar datos ni reducir alcance para cerrar fases.
-- **Resultado local:** API, identidad, UI, precio/histórico y M01 preparados con fixtures sintéticos; no hay proveedor real registrado ni despliegue.
+- **Resultado local de aquel encargo:** API, identidad, UI, precio/histórico y M01 preparados con fixtures sintéticos, sin proveedor real registrado. El despliegue posterior del armazón se registra al principio de esta tarea.
 
 ## Entrada A: F01.04/F01.05 y F05 — Cloudflare personal
 
 1. Conservar Wrangler OAuth existente. Workers Free fue confirmado por el propietario el 02-10-2026; la lectura de suscripciones no está disponible con el OAuth actual. Revisar facturación y cuotas, activar autenticación fuerte y guardar recuperación fuera del repo.
 2. Configurar Zero Trust/Access gratuito para la identidad del propietario. El OAuth no tiene permiso Access; hace falta configuración del panel o una credencial adecuada. No compartir contraseñas/tokens por chat o Git.
-3. Preparar protección del hostname completo y alternativas antes de publicar datos. D1 separadas, bindings reales y cinco migraciones ya están completos; conservar `APP_READY=false` y fuentes desactivadas para el primer armazón remoto. [Procedimiento](../DESPLIEGUE.md).
-4. Verificar sesión válida/caducada, usuario ajeno, ruta alternativa, JWT real, móvil y CPU. El despliegue/push requiere autorización vigente; no se infiere de un commit. Cerrar G-ACCESO solo con resultados reales.
+3. Proteger el Worker staging completo y sus alternativas antes de publicar datos. D1 y primer armazón remoto están completos; conservar `APP_READY=false` y fuentes desactivadas. [Procedimiento](../DESPLIEGUE.md).
+4. Verificar sesión válida/caducada, usuario ajeno, ruta alternativa, JWT real, sesión móvil y CPU. La primera publicación de staging está autorizada y realizada; no se infiere autorización para otras publicaciones o push de un commit. Cerrar G-ACCESO solo con resultados reales.
 
 F01.04 conserva pendiente confirmar la modalidad efectiva y ausencia de facturación con evidencia de la cuenta. Los límites y el responsable constan en [COSTES](../COSTES.md); marcar el plan al satisfacer aceptación. No se considera cerrada por la confirmación del propietario de Workers Free.
 

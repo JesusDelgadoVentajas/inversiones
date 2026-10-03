@@ -2,7 +2,9 @@
 
 Proyecto de aplicación personal para buscar empresas cotizadas por su nombre y consultar precios, cuentas, métricas, noticias, competidores y eventos con fuentes y fechas visibles.
 
-**Estado:** búsqueda por nombre, selección de instrumento, fichas de precio/histórico/cuentas/métricas/noticias preparadas y probados localmente con datos sintéticos; contratos, JWT, motor contable y capa común comprobados. Quince referencias contables SEC verificadas para tres empresas, sin activar proveedores. Las D1 privadas de staging y producción están creadas y migradas en Cloudflare. No hay datos financieros reales en la aplicación, Access activo ni Worker desplegado. El presupuesto objetivo de servicios es 0 € y aún no se ha demostrado para el producto completo.
+**Estado:** búsqueda por nombre, selección de instrumento, fichas de precio/histórico/cuentas/métricas/noticias preparadas y probados localmente con datos sintéticos; contratos, JWT, motor contable y capa común comprobados. Quince referencias contables SEC verificadas para tres empresas, sin activar proveedores. Las D1 privadas de staging y producción están creadas y migradas en Cloudflare. El armazón de staging está publicado y su carga confirmada desde el móvil del propietario. No hay datos financieros reales ni Access activo. El presupuesto objetivo de servicios es 0 € y aún no se ha demostrado para el producto completo.
+
+**Web de pruebas:** [inversiones-staging.inversiones-jdv.workers.dev](https://inversiones-staging.inversiones-jdv.workers.dev). Muestra la preparación con búsqueda desactivada. La pantalla es pública hasta configurar Access; [evidencia y siguientes pasos](docs/evidencias/F05_PRIMERA_PUBLICACION.md).
 
 ## Dónde empezar
 
@@ -64,7 +66,7 @@ npm run dev
 
 Abrir la URL local que imprima Vite, también desde un móvil en la misma red si se configura el servidor para escuchar en esa red. Chromium se instala para las pruebas, no se necesita para arrancar la web. Para todas las verificaciones locales: `npm run check`. Los comandos y su alcance están en [app/README.md](app/README.md). La pantalla normal sigue en preparación con búsqueda desactivada; las vistas se ejercitan con datos sintéticos en Playwright. `GET /api/health` y `GET /api/example` no entregan precios reales.
 
-El repositorio [GitHub público](https://github.com/JesusDelgadoVentajas/inversiones) está creado; esta entrega permanece en commits locales. D1 se ha comprobado en local y en ambas bases remotas; Access, sesión real y Worker remoto siguen pendientes. Las sondas son locales; SEC/TGM añaden contrastes contables acotados, sin activar proveedores ni demostrar acceso Cloudflare. Consultar [estado](docs/ESTADO.md) antes de proseguir.
+El repositorio [GitHub público](https://github.com/JesusDelgadoVentajas/inversiones) está creado; el código sigue en commits locales, sin push. La publicación en Cloudflare se hizo con Wrangler desde la revisión identificada en la evidencia. D1 se ha comprobado en local y en ambas bases remotas; el armazón remoto funciona, pero Access y la sesión real siguen pendientes. Las sondas son locales; SEC/TGM añaden contrastes contables acotados, sin activar proveedores ni demostrar acceso financiero desde Cloudflare. Consultar [estado](docs/ESTADO.md) antes de proseguir.
 
 ## Mantenimiento de la documentación
 

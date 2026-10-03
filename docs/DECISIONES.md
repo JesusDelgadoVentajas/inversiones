@@ -95,6 +95,16 @@ Este registro conserva decisiones y motivos. El avance operativo se mantiene en 
 - **Noticias:** identidad verificada, tipo explícito y URL segura. Deduplicar URL; conservar enlaces diferentes hasta demostrar equivalencia. Cursor de app sobre ventana acotada, sin reenviarlo a terceros; corte temporal sin prometer congelar el corpus.
 - **Consecuencia:** API/UI local antes de aprobar adaptadores, conservando D009 y flags inertes. Fuentes, derechos, cuota y Worker reales pendientes. [Métricas](METRICAS.md), [noticias](NOTICIAS.md), [evidencia](evidencias/F02_F09_F10.md).
 
+<a id="d012--primera-publicacion-inerte-en-staging"></a>
+
+## D012 — Primera publicación inerte en staging
+
+- **Fecha:** 2026-10-03.
+- **Estado:** ADOPTADA; STAGING PUBLICADO Y CARGA MÓVIL CONFIRMADA.
+- **Decisión:** publicar únicamente el armazón de staging autorizado por el propietario, manteniendo ambos flags en falso, proveedores vacíos y URL de versión desactivadas. La pantalla de preparación puede ser pública durante la configuración inicial prevista en DESPLIEGUE; no se activarán datos hasta probar Access. Producción y push quedan separados de esta publicación de pruebas.
+- **Motivo:** comprobar alojamiento y acceso móvil reales mientras el OAuth carece de permisos Access. La cuenta no tenía otros Workers; se registró un subdominio gratuito y se publicó la compilación de staging con su D1 propia, sin cambiar planes.
+- **Consecuencia:** F05.02 se completa para staging. La carga móvil confirmada no acredita inicio de sesión ni cierra G-ACCESO/F09. Las prohibiciones de datos y previews de D007–D010 se conservan; la afirmación histórica de «ningún Worker desplegado» queda sustituida para staging. [Evidencia](evidencias/F05_PRIMERA_PUBLICACION.md).
+
 ## Añadir una decisión
 
 Usa el siguiente ID disponible y registra fecha, estado, decisión, motivo y consecuencias. Si cambias una decisión anterior, conserva su historia y enlaza la que la sustituye. Documenta decisiones relevantes o desviaciones; no conviertas cada elección rutinaria de implementación en un trámite.

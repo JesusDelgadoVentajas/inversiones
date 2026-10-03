@@ -164,7 +164,7 @@ Este resumen se marca al cerrar las fases correspondientes; no reemplaza sus evi
 
 GitHub Pages fue una opción inicial para ahorrar alojamiento. Cloudflare también permite servir los archivos de una aplicación React y ejecutar su API en el mismo proyecto. Un único origen simplifica la sesión, el móvil, las rutas y las peticiones. La dirección gratuita será del tipo `inversiones.<subdominio>.workers.dev`; no hace falta comprar dominio. Véase la [guía oficial de React y Vite en Workers](https://developers.cloudflare.com/workers/framework-guides/web-apps/react/).
 
-Esta es una decisión propuesta para la construcción, todavía sin despliegue. Si el propietario exige Pages, existe una variante en la sección 18; no es la ruta principal.
+Esta arquitectura ya tiene un primer armazón publicado en staging; Access y datos reales siguen pendientes. Véase el [estado](docs/ESTADO.md). Si el propietario exige Pages, existe una variante en la sección 18; no es la ruta principal.
 
 ```mermaid
 flowchart TD
@@ -1143,7 +1143,7 @@ F03 puede preparar estructura mientras F02 espera acceso externo. No se cierra l
 ### F05. Preparar infraestructura y acceso
 
 - [x] F05.01 — Crear D1 de staging y producción; registrar bindings distintos (bases privadas reales, cinco migraciones y nueve tablas vacías verificadas en cada una).
-- [ ] F05.02 — Publicar armazón con `APP_READY=false` y sin datos financieros.
+- [x] F05.02 — Publicar armazón con `APP_READY=false` y sin datos financieros (staging real; producción pendiente).
 - [ ] F05.03 — Proteger hostnames, restringir identidad y desactivar rutas alternativas innecesarias.
 - [x] F05.04 — Implementar verificación JWT, rotación de claves públicas y rechazo seguro ante configuración incompleta (prueba sintética local; Access real pendiente).
 - [x] F05.05 — Probar sesión válida, caducada, usuario ajeno, token manipulado y audiencia de otro entorno (JWT sintéticos y JWKS simulado en Workerd).
@@ -1154,7 +1154,7 @@ F03 puede preparar estructura mientras F02 espera acceso externo. No se cierra l
 
 **Cierre G-ACCESO:** la API de datos es inaccesible para terceros y el propietario entra desde el móvil. Configuración de autenticación ausente implica cierre de acceso, no apertura.
 
-**Estado 2026-10-03:** G-ACCESO pendiente. Hay sesión OAuth sin permiso Access. D1 remotas y bindings distintos completos; no hay Worker desplegado, política Access ni prueba de móvil/CPU. Los controles locales de secretos/artefactos pasan; F05.07 conserva la comprobación remota pendiente. [Evidencia](docs/evidencias/F01_F08_CONTINUACION.md). Las URL de versión están desactivadas en el artefacto local; este proyecto no ha creado previews con nombre. [Preparación](docs/DESPLIEGUE.md).
+**Estado 2026-10-03:** G-ACCESO pendiente. D1 remotas y bindings distintos completos; staging inerte desplegado y carga confirmada desde el móvil del propietario. La pantalla de preparación es pública, sin fuentes financieras activas. El OAuth no tiene permiso Access; faltan política, secretos, JWT/sesión reales y CPU. Las URL de versión están desactivadas también remotamente; este proyecto no ha creado previews con nombre. F05.07 conserva la comprobación de secretos/registros remotos pendiente. [Primera publicación](docs/evidencias/F05_PRIMERA_PUBLICACION.md), [bases privadas](docs/evidencias/F01_F08_CONTINUACION.md) y [procedimiento](docs/DESPLIEGUE.md).
 
 <a id="f06"></a>
 
@@ -1223,7 +1223,7 @@ F03 puede preparar estructura mientras F02 espera acceso externo. No se cierra l
 - [ ] F09.08 — Probar los casos contables de la sección 10 y medir CPU/payload en móvil.
 - [ ] F09.09 — Confirmar al menos 20 métricas adicionales válidas en varias empresas representativas del alcance.
 
-**Estado 2026-10-03:** mapeo US GAAP acotado, correcciones, trimestres/TTM, catálogo M01–M32, compatibilidad y explicaciones implementados y probados localmente. Los ticks F09.02–F09.06 acreditan ese ámbito; IFRS y mapeos específicos de otros emisores siguen pendientes. Contraste local SEC/TGM: 24 importes y cinco métricas por Apple/Microsoft/NVIDIA, con una diferencia documental explicada. F09.01 sigue abierta sin adaptador aprobado; F09.07 tiene referencias preparadas pero falta aceptación del alcance; F09.08 carece de CPU remota/teléfono real; F09.09 no se cumple con datos reales. [Evidencia](docs/evidencias/F02_F09_F10.md), [convenciones](docs/METRICAS.md).
+**Estado 2026-10-03:** mapeo US GAAP acotado, correcciones, trimestres/TTM, catálogo M01–M32, compatibilidad y explicaciones implementados y probados localmente. Los ticks F09.02–F09.06 acreditan ese ámbito; IFRS y mapeos específicos de otros emisores siguen pendientes. Contraste local SEC/TGM: 24 importes y cinco métricas por Apple/Microsoft/NVIDIA, con una diferencia documental explicada. F09.01 sigue abierta sin adaptador aprobado; F09.07 tiene referencias preparadas pero falta aceptación del alcance; F09.08 carece de CPU remota y de prueba de cuentas/métricas en teléfono real (la carga del armazón ya está confirmada); F09.09 no se cumple con datos reales. [Evidencia](docs/evidencias/F02_F09_F10.md), [convenciones](docs/METRICAS.md).
 
 **Cierre G-CIFRAS:** cálculos reproducibles, fuentes consultables y ninguna mezcla silenciosa de periodos, escalas o instrumentos.
 
